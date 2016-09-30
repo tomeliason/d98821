@@ -9,15 +9,17 @@
 # -- 
 # ------------------------------------------------------------------------
 
+. ../common/common.properties
 . ../common/common.sh
 
 createJDBCDataSource() {
-
-    setenv
     
-    ssh -i ~/.ssh/id_rsa -f -N -T -M -L 9001:140.86.34.161:9001 opc@remotehost-proxy
+    echo ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@remotehost-proxy
+
+    ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@remotehost-proxy
 
     source $WL_HOME/server/bin/setWLSEnv.sh
+    
     java weblogic.WLST create_data_source.py
 
     ssh -T -O "exit" remotehost-proxy

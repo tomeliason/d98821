@@ -9,9 +9,22 @@
 # -- 
 # ------------------------------------------------------------------------
 
-setenv() {
 
-    export WL_HOME=c:/oracle/wls1221/wlserver
-    export MW_HOME=c:/oracle/wls1221
+function jsonValue() {
+KEY=$1
+num=$2
+awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$KEY'\042/){print $(i+1)}}}' | tr -d '"' | sed -n ${num}p
+}
 
+
+function jsonValue2() {
+KEY=$1
+num=$2
+awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$KEY'\042/){print $(i+2)}}}' | tr -d '"' | sed -n ${num}p
+}
+
+function jsonValue3() {
+KEY=$1
+num=$2
+awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/\042'$KEY'\042/){print $(i+2)}}}' | tr -d '"' | sed -n ${num}p
 }

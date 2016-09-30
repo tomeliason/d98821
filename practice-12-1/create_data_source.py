@@ -12,13 +12,17 @@
 # --    You should always run new scripts on a test instance initially.
 # ------------------------------------------------------------------------
 
+# get operating system (for vars)
+import os
+import sys
+
 # variables
-url = 't3://localhost:9001'
-username = 'weblogic'
-password = 'Welcome_1'
+url = os.getenv('WLSAdminURL')
+username = os.getenv('WLSUsername')
+password = os.getenv('WLSPassword')
 dsname = 'datasource1'
 jndiname = 'datasource1'
-clustername = 'JCS_Cluster'
+clustername = os.getenv('WLSClusterName')
 initialcap = 1
 maxcap = 5
 mincap = 1
@@ -29,9 +33,10 @@ testfreq = 240
 trustidle = 60
 shrink = 300
 drivername = 'oracle.jdbc.xa.client.OracleXADataSource'
-driverurl = 'jdbc:oracle:thin:@DB:1521/PDB1.ouopc005.oraclecloud.internal'
-driveruser = 'system'
-driverpassword = 'Welcome_1'
+#driverurl = 'jdbc:oracle:thin:@DB:1521/PDB1.ouopc005.oraclecloud.internal'
+driverurl = os.getenv('DBDSURL')
+driveruser = os.getenv('DBDSUsername')
+driverpassword = os.getenv('DBDSPassword')
 testtable='SQL SELECT 1 FROM DUAL'
 
 # Connect to administration server
