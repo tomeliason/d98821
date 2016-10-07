@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ========================================================================
+  == DISCLAIMER:
+  ==    This script is provided for educational purposes only. It is NOT
+  ==    supported by Oracle World Wide Technical Support.
+  ==    The script has been tested and appears to work as intended.
+  ==    You should always run new scripts on a test instance initially.
+  ==
+  ======================================================================== -->
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>ShoppingCart</display-name>
+  <servlet>
+		<servlet-name>BrowseCategories</servlet-name>
+		<servlet-class>com.servlets.browseCategories</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>AddToShoppingCart</servlet-name>
+		<servlet-class>com.servlets.shoppingCart</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>ViewShoppingCart</servlet-name>
+		<servlet-class>com.servlets.viewShoppingCart</servlet-class>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>BrowseCategories</servlet-name>
+		<url-pattern>/browsecategories</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AddToShoppingCart</servlet-name>
+		<url-pattern>/addtocart</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>ViewShoppingCart</servlet-name>
+		<url-pattern>/viewshoppingcart</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>welcome.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>

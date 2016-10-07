@@ -1,0 +1,47 @@
+dn: dc=example,dc=com
+objectClass: domain
+objectClass: top
+dc: example
+entryUUID: 54c89c45-327b-3d38-8a2e-b7814de651a4
+
+dn: uid=larryf,dc=example,dc=com
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: top
+givenName: Larry
+uid: larryf
+cn: Larry Fine
+sn: Fine
+userPassword: {SSHA}eE8Khb7q6fq0I+C17x/tkHiocpELV/ytauCbLg==
+mail: larry.fine@example.com
+entryUUID: 0a5b578c-1e2b-458d-bc31-93902a53e12b
+createTimestamp: 20130403121731Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+pwdChangedTime: 20130403121731.000Z
+
+dn: uid=moeh,dc=example,dc=com
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: top
+givenName: Moe
+uid: moeh
+cn: Moe Howard
+sn: Howard
+userPassword: {SSHA}BU2Tgz3WI+EX7tpeJs5ofwnFFG1iHtl8tl5umQ==
+mail: moe.howard@example.com
+entryUUID: 8a1052d7-80f1-4298-ab3b-23beb59cc7db
+createTimestamp: 20130403121921Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+pwdChangedTime: 20130403121921.659Z
+
+dn: cn=boss,dc=example,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: boss
+uniqueMember: uid=moeh,dc=example,dc=com
+entryUUID: 44cb41cb-836e-4fac-9f80-4f21b16f4d1c
+createTimestamp: 20130403122319Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+
