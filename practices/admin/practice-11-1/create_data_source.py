@@ -17,9 +17,12 @@ import os
 import sys
 
 # variables
-url = os.getenv('WLSAdminURL')
+url = 't3://' + os.getenv('WLSAdminHost') + ':' + os.getenv('WLSAdminPort')
 username = os.getenv('WLSUsername')
 password = os.getenv('WLSPassword')
+
+print url
+
 dsname = 'datasource1'
 jndiname = 'datasource1'
 clustername = os.getenv('WLSClusterName')

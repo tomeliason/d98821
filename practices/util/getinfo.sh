@@ -9,7 +9,7 @@
 # -- 
 # ------------------------------------------------------------------------
 
-echo curl -i -X GET -u ${opcUsername}:${opcPassword} -H "X-ID-TENANT-NAME:${identityDomain}"  https://${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName}
+echo curl -i -X GET -u ${opcUsername}:${opcPassword} -H "X-ID-TENANT-NAME:${identityDomain}"  ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName}
 
 curl -i -X GET -u ${opcUsername}:${opcPassword} -H "X-ID-TENANT-NAME:${identityDomain}"  ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName}
 
