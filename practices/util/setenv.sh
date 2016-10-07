@@ -8,6 +8,7 @@
 # --    You should always run new scripts on a test instance initially.
 # --
 # ------------------------------------------------------------------------
+#
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #echo "CURRENT_DIR=$CURRENT_DIR as dir"
