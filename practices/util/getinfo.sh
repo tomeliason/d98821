@@ -19,12 +19,6 @@ curl --include --request GET --cacert ~/cacert.pem --user ${opcUsername}:${opcPa
 
 echo ""
 
-#curl -s -i -X GET -u ${username}:${password} -H "X-ID-TENANT-NAME:${identitydomain}"  ${jcsendpoint}/paas/service/jcs/api/v1.1/instances/${identitydomain}/${jcsservicename} | jsonValue3 wls_admin_url
-
-#curl -s -i -X GET -u ${username}:${password} -H "X-ID-TENANT-NAME:${identitydomain}"  ${jcsendpoint}/paas/service/jcs/api/v1.1/instances/${identitydomain}/${jcsservicename} | jsonValue3 otd_admin_url
-
-#curl -s --include --request GET --cacert ~/cacert.pem --user ${username}:${password} --header "X-ID-TENANT-NAME:${identitydomain}" ${dbcsendpoint}/paas/service/dbcs/api/v1.1/instances/${identitydomain}/${servicename} |  jsonValue connect_descriptor_with_public_ip
-
 
 response=$(curl -s -i -X GET -u ${opcUsername}:${opcPassword} -H "X-ID-TENANT-NAME:${identityDomain}"  ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName})
 
