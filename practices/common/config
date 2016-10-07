@@ -1,0 +1,3 @@
+Host remotehost-proxy
+    HostName 140.86.34.161
+    ControlPath ~/.ssh/remotehost-proxy.ctl
