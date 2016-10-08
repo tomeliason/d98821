@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<domain xmlns="http://xmlns.oracle.com/weblogic/domain" xmlns:sec="http://xmlns.oracle.com/weblogic/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wls="http://xmlns.oracle.com/weblogic/security/wls" xsi:schemaLocation="http://xmlns.oracle.com/weblogic/security/wls http://xmlns.oracle.com/weblogic/security/wls/1.0/wls.xsd http://xmlns.oracle.com/weblogic/domain http://xmlns.oracle.com/weblogic/1.0/domain.xsd http://xmlns.oracle.com/weblogic/security/xacml http://xmlns.oracle.com/weblogic/security/xacml/1.0/xacml.xsd http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator/1.0/passwordvalidator.xsd http://xmlns.oracle.com/weblogic/security http://xmlns.oracle.com/weblogic/1.0/security.xsd">
+  <name>wlsadmin</name>
+  <domain-version>12.2.1.0.0</domain-version>
+  <security-configuration>
+    <name>wlsadmin</name>
+    <realm>
+      <sec:authentication-provider xsi:type="wls:default-authenticatorType">
+        <sec:name>DefaultAuthenticator</sec:name>
+        <sec:control-flag>REQUIRED</sec:control-flag>
+      </sec:authentication-provider>
+      <sec:authentication-provider xsi:type="wls:default-identity-asserterType">
+        <sec:name>DefaultIdentityAsserter</sec:name>
+        <sec:active-type>AuthenticatedUser</sec:active-type>
+        <sec:active-type>weblogic-jwt-token</sec:active-type>
+      </sec:authentication-provider>
+      <sec:role-mapper xmlns:xac="http://xmlns.oracle.com/weblogic/security/xacml" xsi:type="xac:xacml-role-mapperType">
+        <sec:name>XACMLRoleMapper</sec:name>
+        <sec:role-deployment-enabled>true</sec:role-deployment-enabled>
+      </sec:role-mapper>
+      <sec:authorizer xmlns:xac="http://xmlns.oracle.com/weblogic/security/xacml" xsi:type="xac:xacml-authorizerType">
+        <sec:name>XACMLAuthorizer</sec:name>
+        <sec:policy-deployment-enabled>true</sec:policy-deployment-enabled>
+      </sec:authorizer>
+      <sec:adjudicator xsi:type="wls:default-adjudicatorType">
+        <sec:name>DefaultAdjudicator</sec:name>
+      </sec:adjudicator>
+      <sec:credential-mapper xsi:type="wls:default-credential-mapperType">
+        <sec:name>DefaultCredentialMapper</sec:name>
+        <sec:credential-mapping-deployment-enabled>true</sec:credential-mapping-deployment-enabled>
+      </sec:credential-mapper>
+      <sec:cert-path-provider xsi:type="wls:web-logic-cert-path-providerType">
+        <sec:name>WebLogicCertPathProvider</sec:name>
+      </sec:cert-path-provider>
+      <sec:cert-path-builder>WebLogicCertPathProvider</sec:cert-path-builder>
+      <sec:name>myrealm</sec:name>
+      <sec:password-validator xmlns:pas="http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator" xsi:type="pas:system-password-validatorType">
+        <sec:name>SystemPasswordValidator</sec:name>
+        <pas:min-password-length>8</pas:min-password-length>
+        <pas:min-numeric-or-special-characters>1</pas:min-numeric-or-special-characters>
+      </sec:password-validator>
+    </realm>
+    <default-realm>myrealm</default-realm>
+    <credential-encrypted>{AES}STtqQ8293OC8l84P3lqBjmwFld/VAQbXJLisnmUv3hzkPCw/uvY97eyQk8dvUqlixndB6oCLtuv/htvKn9c93Aq02SoU+ibgsHuTjeH9up/r4+TD/n9+WReOXpDhQcMs</credential-encrypted>
+    <node-manager-username>weblogic</node-manager-username>
+    <node-manager-password-encrypted>{AES}elMoZdufPp0TFJyCdd4lSq5G4RN131SEiv3QZh6eKR0=</node-manager-password-encrypted>
+  </security-configuration>
+  <server>
+    <name>AdminServer</name>
+    <listen-address></listen-address>
+  </server>
+  <server>
+    <name>server1</name>
+    <ssl>
+      <enabled>true</enabled>
+      <listen-port>8011</listen-port>
+      <server-private-key-alias>wlskey</server-private-key-alias>
+      <server-private-key-pass-phrase-encrypted>{AES}B3L1qqflZQ17P1/qUt1hl7NRMgyeWAVR5TB08fLY5Yg=</server-private-key-pass-phrase-encrypted>
+    </ssl>
+    <machine>machine1</machine>
+    <listen-port>7011</listen-port>
+    <listen-port-enabled>true</listen-port-enabled>
+    <cluster>cluster1</cluster>
+    <listen-address></listen-address>
+    <java-compiler>javac</java-compiler>
+    <jta-migratable-target>
+      <name>server1</name>
+      <user-preferred-server>server1</user-preferred-server>
+      <cluster>cluster1</cluster>
+      <migration-policy>manual</migration-policy>
+    </jta-migratable-target>
+    <client-cert-proxy-enabled>false</client-cert-proxy-enabled>
+    <key-stores>CustomIdentityAndJavaStandardTrust</key-stores>
+    <custom-identity-key-store-file-name>wls_identity.jks</custom-identity-key-store-file-name>
+    <custom-identity-key-store-type>JKS</custom-identity-key-store-type>
+    <custom-identity-key-store-pass-phrase-encrypted>{AES}1otPO4TEQtMBrQeAxGAMa2VWGjEZFU5mWqovWh5RW0E=</custom-identity-key-store-pass-phrase-encrypted>
+    <java-standard-trust-key-store-pass-phrase-encrypted>{AES}TRLPVRxAT9M1hYftRn8n8I4eFqoVL2h8M5r3oDf5gfE=</java-standard-trust-key-store-pass-phrase-encrypted>
+    <server-diagnostic-config>
+      <wldf-diagnostic-volume>Low</wldf-diagnostic-volume>
+    </server-diagnostic-config>
+  </server>
+  <server>
+    <name>server2</name>
+    <machine>machine2</machine>
+    <listen-port>7012</listen-port>
+    <cluster>cluster1</cluster>
+    <listen-address></listen-address>
+    <jta-migratable-target>
+      <name>server2</name>
+      <user-preferred-server>server2</user-preferred-server>
+      <cluster>cluster1</cluster>
+      <migration-policy>manual</migration-policy>
+    </jta-migratable-target>
+  </server>
+  <cluster>
+    <name>cluster1</name>
+    <cluster-messaging-mode>unicast</cluster-messaging-mode>
+    <weblogic-plugin-enabled>true</weblogic-plugin-enabled>
+    <dynamic-servers>
+      <maximum-dynamic-server-count>0</maximum-dynamic-server-count>
+    </dynamic-servers>
+  </cluster>
+  <production-mode-enabled>true</production-mode-enabled>
+  <embedded-ldap>
+    <name>wlsadmin</name>
+    <credential-encrypted>{AES}xamE7jN7JvHdNLsfxcX1ZOXdR0H+QWK81gc1p5n1C7BClJoDgjE9Q/2ERbg+ref5</credential-encrypted>
+  </embedded-ldap>
+  <configuration-version>12.2.1.0.0</configuration-version>
+  <app-deployment>
+    <name>SimpleAuctionWebApp</name>
+    <target>cluster1</target>
+    <module-type>war</module-type>
+    <source-path>/practices/part2/apps/SimpleAuctionWebApp.war</source-path>
+    <security-dd-model>DDOnly</security-dd-model>
+    <staging-mode xsi:nil="true"></staging-mode>
+    <plan-staging-mode xsi:nil="true"></plan-staging-mode>
+    <cache-in-app-directory>false</cache-in-app-directory>
+  </app-deployment>
+  <machine>
+    <name>machine1</name>
+    <node-manager>
+      <name>machine1</name>
+      <nm-type>Plain</nm-type>
+      <listen-address>host01.example.com</listen-address>
+      <listen-port>5556</listen-port>
+    </node-manager>
+  </machine>
+  <machine>
+    <name>machine2</name>
+    <node-manager>
+      <name>machine2</name>
+      <nm-type>Plain</nm-type>
+      <listen-address>host02.example.com</listen-address>
+      <listen-port>5556</listen-port>
+    </node-manager>
+  </machine>
+  <migratable-target>
+    <name>server1 (migratable)</name>
+    <notes>This is a system generated default migratable target for a server. Do not delete manually.</notes>
+    <user-preferred-server>server1</user-preferred-server>
+    <cluster>cluster1</cluster>
+    <migration-policy>manual</migration-policy>
+  </migratable-target>
+  <migratable-target>
+    <name>server2 (migratable)</name>
+    <notes>This is a system generated default migratable target for a server. Do not delete manually.</notes>
+    <user-preferred-server>server2</user-preferred-server>
+    <cluster>cluster1</cluster>
+    <migration-policy>manual</migration-policy>
+  </migratable-target>
+  <admin-server-name>AdminServer</admin-server-name>
+  <jdbc-system-resource>
+    <name>AuctionDBDataSource</name>
+    <target>cluster1</target>
+    <descriptor-file-name>jdbc/AuctionDBDataSource-2778-jdbc.xml</descriptor-file-name>
+  </jdbc-system-resource>
+</domain>
