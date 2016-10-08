@@ -11,33 +11,42 @@
 # deploy auction app to JCS using data source
 # attempt to perform a GET that accesses the auction app and uses the database
 
-identitydomain=ouopc005
-username=tom.eliason@oracle.com
-password=Welc0me1
-servicename=DB
-jcsservicename=JCS
-storagename=mystorage1
-authtoken=none
-dbcsendpoint=https://dbcs.emea.oraclecloud.com
-jcsendpoint=https://jcs.emea.oraclecloud.com
-sshpublickey=none
-jcshost=140.86.34.161
-wlsusername=weblogic
-wlspassword=Welcome_1
+# function to create a JDBC Data Source named datasource1 using WLST
+createJDBCDataSource_datasource1() {
+    
+    echo "setting up ssh tunnel for WLST"
+    echo ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@remotehost-proxy
 
-WL_HOME=c:/oracle/wls1221/wlserver
-MW_HOME=c:/oracle/wls1221
+    ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@remotehost-proxy
 
-#mkdir /u01/domains/part1/wlsadmin/apps
-#cp benefits.war /u01/domains/part1/wlsadmin/apps/benefits.old
-#cp /practices/part1/practice10-01/update/benefits.war /u01/domains/part1/wlsadmin/apps/benefits.war
+    source $WL_HOME/server/bin/setWLSEnv.sh
+    
+    java weblogic.WLST create_data_source.py
 
-ssh -i ~/.ssh/id_rsa -f -N -T -M -L 7001:140.86.34.161:7001 opc@remotehost-proxy
-curl -v -u ${wlsusername}:${wlspassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'benefits',targets:['JCS_Cluster']}" -F "deployment=@./benefits.war" -X POST http://localhost:7001/management/wls/latest/deployments/application
-ssh -T -O "exit" remotehost-proxy
+    echo ssh -T -O "exit" remotehost-proxy
+    ssh -T -O "exit" remotehost-proxy
+    echo "terminating ssh tunnel for WLST"
 
-#scp benefits.war opc@140.86.34.161:/home/opc
-#ssh -i ~/.ssh/id_rsa -f -N -T -M -L 9001:140.86.34.161:9001 opc@remotehost-proxy
-#source $WL_HOME/server/bin/setWLSEnv.sh
-#java weblogic.WLST deploy_app.py
-#ssh -T -O "exit" remotehost-proxy
+}
+
+# function to deploy the contacts application to weblogic server
+# environment variables:
+#   - JCSHost        - IP Address of the Admin Server
+#   - WLSDeployPort  - Port of the Admin Server - Administration Port
+#   - WLSUsername    - Admin User
+#   - WLSPassword    - Admin Password
+#   - WLSClusterName - Target Cluster
+
+deployApplication_simpleAuctionWebAppDb() {
+
+curl -v -k -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'SimpleAuctionWebAppDb',targets:['${WLSClusterName}']}" -F "deployment=@./SimpleAuctionWebAppDb.war" -X POST https://${JCSHost}:${WLSSecureDeployPort}/management/wls/latest/deployments/application
+
+}
+
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "smoketest.sh" ] ; then
+
+    createJDBCDataSource_datasource1
+    deployApplication_simpleAuctionWebAppDb
+
+fi
