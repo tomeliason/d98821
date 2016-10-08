@@ -9,7 +9,14 @@
 # -- 
 # ------------------------------------------------------------------------
 
-# function to create a JDBC Data Source named datasource1 using WLST
+# function to deploy the benefits application to weblogic server
+# environment variables:
+#   - JCSHost        - IP Address of the Admin Server
+#   - WLSDeployPort  - Port of the Admin Server - Administration Port
+#   - WLSUsername    - Admin User
+#   - WLSPassword    - Admin Password
+#   - WLSClusterName - Target Cluster
+
 deployApplication_benefits() {
 
     echo "setting up ssh tunnel for WLST"
