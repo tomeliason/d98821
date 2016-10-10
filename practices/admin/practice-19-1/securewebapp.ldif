@@ -1,0 +1,47 @@
+version: 1
+
+dn: dc=example,dc=com
+objectClass: domain
+objectClass: top
+dc: example
+
+dn: ou=groups,dc=example,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+dn: ou=people,dc=example,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: people
+
+dn: sn=webuser,ou=people,dc=example,dc=com
+objectClass: person
+objectClass: top
+cn: webuser
+sn: webuser
+userPassword:: e1NTSEE1MTJ9ZDVKSitiZHJSL1NRcmxoWEVTRGdUZUMwcjlRN3orQmhkL3RBe
+ WRNMzc3bmtmNmxTYndsak5BaWEwY1VaMTAycytpTnNOZWhwQUtxRVdSWlNud0UyS3ZFZkVUT2Vr
+ aDFQ
+
+dn: sn=adminuser,ou=people,dc=example,dc=com
+objectClass: person
+objectClass: top
+cn: adminuser
+sn: adminuser
+userPassword:: e1NTSEE1MTJ9QVg0ajVzWGZNM0tCZFhWcHVvSGthRVBzMjZZMEZOVVROUU8wc
+ zRuKy9BbVptMytLT3NMS29nY3JwRlRib2U1S2NRUlZQWDF1TGhON1QvaXdtMnAwVWRTNW9YclVo
+ Ly92
+
+dn: cn=admingroup,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+objectClass: top
+cn: admingroup
+member: sn=adminuser,ou=people,dc=example,dc=com
+
+dn: cn=webgroup,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+objectClass: top
+cn: webgroup
+member: sn=webuser,ou=people,dc=example,dc=com
+
