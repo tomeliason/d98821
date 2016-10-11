@@ -350,7 +350,7 @@ function exportProperties() {
 			fi
 			continue
 		fi
-		echo "export '$exportline'"
+		#echo "export '$exportline'"
 		echo "export $exportline " >> $newFilename
 		
 	done < "$filename"	
