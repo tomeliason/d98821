@@ -1,0 +1,72 @@
+
+{
+  "name" : "/Compute-acme/joe.jonathan@example.com/O_Instances",
+  "description" : "instance orchestration",
+  "oplans" : [ {
+    "obj_type" : "ip/reservation",
+    "label" : "My-IP-reservations",
+    "objects" : [ {
+      "name" : "/Compute-acme/joe.jonathan@example.com/ipres1",
+      "parentpool" : "/oracle/public/ippool",
+      "permanent" : true
+    }, {
+      "name" : "/Compute-acme/joe.jonathan@example.com/ipres2",
+      "parentpool" : "/oracle/public/ippool",
+      "permanent" : true
+    } ]
+  }, {
+    "obj_type" : "launchplan",
+    "ha_policy" : "active",
+    "label" : "My-instances",
+    "objects" : [ {
+      "instances" : [ {
+        "networking" : {
+          "eth0" : {
+            "seclists" : [ 
+		"/Compute-acme/joe.jonathan@example.com/sysadmin_seclist" ,
+		"/Compute-acme/joe.jonathan@example.com/http_seclist"
+		],
+			
+            "nat" : "ipreservation:/Compute-acme/joe.jonathan@example.com/ipres1"
+          }
+        },
+        "name" : "/Compute-acme/joe.jonathan@example.com/compute1",
+        "storage_attachments" : [ {
+          "volume" : "/Compute-acme/joe.jonathan@example.com/volA",
+          "index" : 1
+        } ],
+        "boot_order" : [ 1 ],
+        "label" : "vm1",
+        "shape" : "oc3",
+        "sshkeys" : [ "/Compute-acme/joe.jonathan@example.com/KEY-1" ]
+      }, {
+        "networking" : {
+          "eth0" : {
+            "seclists" : [ 
+		"/Compute-acme/joe.jonathan@example.com/sysadmin_seclist" ,
+		"/Compute-acme/joe.jonathan@example.com/http_seclist"
+		],
+   			
+            "nat" : "ipreservation:/Compute-acme/joe.jonathan@example.com/ipres2"
+          }
+        },
+        "name" : "/Compute-acme/joe.jonathan@example.com/compute2",
+        "storage_attachments" : [ {
+          "volume" : "/Compute-acme/joe.jonathan@example.com/volB",
+          "index" : 1
+        } ],
+        "boot_order" : [ 1 ],
+        "label" : "vm2",
+        "shape" : "oc3",
+        "sshkeys" : [ "/Compute-acme/joe.jonathan@example.com/KEY-1" ]
+      } ]
+    } ]
+  } ],
+	"relationships" : [{
+            "oplan": "My-instances",
+            "to_oplan": "My-IP-reservations",
+            "type": "depends"
+        }
+ ]
+  
+}

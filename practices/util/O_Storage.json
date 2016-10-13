@@ -1,0 +1,31 @@
+
+{
+	"name": "/Compute-acme/joe.jonathan@exmaple.com/Orchestration_Storage_vol",
+	"description": "storage volumes orchestration",
+  "oplans": [
+
+    {
+      "label": "My storage volumes",
+      "obj_type": "storage/volume",
+
+      "objects": [
+        {
+          "name": "/Compute-acme/joe.jonathan@example.com/volA",
+          "bootable": true,
+          "imagelist": "/oracle/public/OL-6.6-20GB-x11-RD",
+          "properties": ["/oracle/public/storage/default"],
+          "size": "22548578304"
+        },
+        {
+          "name": "/Compute-acme/joe.jonathan@example.com/volB",
+          "bootable": true,
+          "imagelist": "/oracle/public/OL-6.6-20GB-x11-RD",   
+          "properties": ["/oracle/public/storage/default"],
+          "size": "22548578304"
+        }
+      ]
+    }
+
+  ]
+
+}

@@ -1,0 +1,39 @@
+{
+  "name" : "/Compute-ouopc005/tom.eliason@oracle.com/O_Master",
+  "description" : "Master orchestration",
+  "oplans" : [ {
+    "obj_type" : "orchestration",
+    "ha_policy" : "",
+    "label" : "O_Instances",
+    "objects" : [ {
+      "name" : "/Compute-ouopc005/tom.eliason@oracle.com/O_Instances"
+     
+    } ]
+  }, {
+    "obj_type" : "orchestration",
+    "ha_policy" : "",
+    "label" : "O_Networking",
+    "objects" : [ {
+      "name" : "/Compute-ouopc005/tom.eliason@oracle.com/O_Networking"
+     
+    } ]
+  }, {
+    "obj_type" : "orchestration",
+    "ha_policy" : "",
+    "label" : "O_Storage",
+    "objects" : [ {
+      "name" : "/Compute-ouopc005/tom.eliason@oracle.com/O_Storage"
+      
+    } ]
+  } ],
+"relationships" : [ {
+    "oplan" : "O_Instances",
+    "to_oplan" : "O_Networking",
+    "type" : "depends"
+  }, {
+    "oplan" : "O_Instances",
+    "to_oplan" : "O_Storage",
+    "type" : "depends"
+  } ]
+  
+}

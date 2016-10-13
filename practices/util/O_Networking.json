@@ -1,0 +1,52 @@
+{
+	"name": "/Compute-acme/joe.jonathan@exmaple.com/Orch_Networking",
+	"description": "network objects orchestration",
+	
+	"relationships": [
+        {
+	"oplan": "My-security-rules",            
+	"to_oplan": "My-seclists",
+         "type": "depends"
+        }
+],
+
+"oplans": [
+{
+      "label": "My-seclists",
+      "obj_type": "seclist",
+
+      "objects": [
+        {
+          "name": "/Compute-acme/joe.jonathan@exmaple.com/sysadmin_seclist"
+        },
+ {
+          "name": "/Compute-acme/joe.jonathan@exmaple.com/http_seclist"
+	
+        }
+      ]
+    },
+
+    {
+      "label": "My-security-rules",
+      "obj_type": "secrule",
+
+      "objects": [
+        {
+       "name": "/Compute-acme/joe.jonathan@exmaple.com/ssh_sysadmin_rule",
+          "application": "/oracle/public/ssh",
+          "src_list": "seciplist:/oracle/public/public-internet",
+         "dst_list": "seclist:/Compute-acme/joe.jonathan@exmaple.com/sysadmin_seclist",
+          "action": "PERMIT"
+        },
+
+ {
+       "name": "/Compute-acme/joe.jonathan@exmaple.com/http_rule",
+          "application": "/oracle/public/http",
+          "src_list": "seciplist:/oracle/public/public-internet",
+         "dst_list": "seclist:/Compute-acme/joe.jonathan@exmaple.com/http_seclist",
+          "action": "PERMIT"
+      
+}]  
+}
+]
+}
