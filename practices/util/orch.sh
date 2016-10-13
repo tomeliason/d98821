@@ -10,16 +10,23 @@
 # ------------------------------------------------------------------------
 
 data={\"password\":\"${opcPassword}\",\"user\":\"/Compute-${identityDomain}/${opcUsername}\"}
-contenttype=\"Content-Type:text/plain;charset=utf-8\"
+contenttype="Content-Type:application/oracle-compute-v3+json"
+accepttype=\"Accept:application/oracle-compute-v3+json\"
+acceptencoding=\"Accept-Encoding:gzip;q-1.0,identity;q=0.5\"
+acceptcharset=\"Accept-Charset:UTF-8\"
 
 echo $data
 echo $contenttype
 
-echo curl -v -H $contenttype X POST --data \'$data\' ${ComputeEndpoint}/authenticate/
+echo curl -i -D - -H $contenttype -X POST -d \'$data\' ${ComputeEndpoint}/authenticate/
 
-curl -v -H $contenttype -X POST --data \'$data\' -k ${ComputeEndpoint}/authenticate/ > temp.txt
+curl -i -D - -H $contenttype -X POST -d \'$data\' -k ${ComputeEndpoint}/authenticate/ 
 
-response=$(curl -v -H $contenttype X POST --data \'$data\' -k ${ComputeEndpoint}/authenticate/)
+mycurl="curl -i -D - -H $contenttype -X POST -d '$data' -k ${ComputeEndpoint}/authenticate/"
+
+echo $mycurl
+
+response=$($mycurl)
 
 echo $response
 
