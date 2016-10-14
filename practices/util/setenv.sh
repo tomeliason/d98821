@@ -39,3 +39,8 @@ for file in $functionsList; do
 	source $CURRENT_DIR/$file
 	echo "sourcing $CURRENT_DIR/$file"
 done
+
+#
+# Lastly add the current directory to the common properties file as UTILITY_DIR
+#
+setProperty UTILITY_DIR $CURRENT_DIR  $CURRENT_DIR/../common/common.properties

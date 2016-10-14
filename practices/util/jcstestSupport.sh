@@ -55,9 +55,9 @@ function confirmJCSEnvironment() {
 	# Got a properties file
 	# see if file exists
 	if [ ! -f $propertyfile ]; then
-       echo "Property file '$propertyfile' not found" 
-       errorValue="Error: Property file '$propertyfile' not found"
-       return 2
+       		echo "Property file '$propertyfile' not found" 
+	       	errorValue="Error: Property file '$propertyfile' not found"
+       		return 2
 	fi
 
 	#
@@ -66,7 +66,7 @@ function confirmJCSEnvironment() {
 	# 
 	#unset debug
 	exportProperties $propertyfile
-	#debug=$originalDebug
+	#debug="1"
 	
 	#
 	# Basic curl common stuff
@@ -85,7 +85,7 @@ function confirmJCSEnvironment() {
 	#STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" URL)
 	if [[ "$debug" = "1" ]]; then
 		echo
-		echo "Executing command '$CCOMMAND' "
+		echo "Executing command '$curlCOMMAND' "
 		echo "Using elements:"
 		echo "  curlCommonArguments ='${curlCommonArguments}'"
 		echo "  curlCredentials ='${curlCredentials}'"
@@ -93,8 +93,8 @@ function confirmJCSEnvironment() {
 		echo "  curlBaseURL ='${curlBaseURL}'"	
 		echo
 	fi
-	#echo `$curlCOMMAND`
-    curlResult=$($curlCOMMAND) > /dev/nul 2>&1
+	echo `$curlCOMMAND`
+    curlResult=$($curlCOMMAND) > /dev/null 2>&1
 	curl_status=$?
 	if [[ -n "$outputFile" ]]; then
 		echo "" > $outputFile
@@ -160,7 +160,7 @@ Check the value of:"
     curlCOMMAND="curl ${curlCommonArguments} --cacert $certFile -X GET ${curlCredentials} ${curlHeader} ${curlBaseURL}"
 	if [[ "$debug" = "1" ]]; then
 		echo
-		echo "Executing command '$CCOMMAND' "
+		echo "Executing command '$curlCOMMAND' "
 		echo "Using elements:"
 		echo "  curlCommonArguments ='${curlCommonArguments}'"
 		echo "  curlCredentials ='${curlCredentials}'"
@@ -168,7 +168,7 @@ Check the value of:"
 		echo "  curlBaseURL ='${curlBaseURL}'"		
 		echo
 	fi
-	curlResult=$($curlCOMMAND) > /dev/nul 2>&1
+	curlResult=$($curlCOMMAND) > /dev/null 2>&1
 	curl_status=$?
 	if [[  -n "$outputFile" ]]; then
 		echo "" >> $outputFile
