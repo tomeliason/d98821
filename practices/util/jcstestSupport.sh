@@ -12,7 +12,6 @@
 # 
 #
 
-
 #
 #
 # jcsIsRunning /path.to/properties.file [default proxy value]
