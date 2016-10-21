@@ -1,5 +1,7 @@
 #!/bin/bash
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+echo "source $CURRENT_DIR/provision.properties"
 source $CURRENT_DIR/provision.properties
 
 #echo "Cleaning up old rsa keys"
@@ -34,8 +36,8 @@ sshprivatekey=$(<$rsaRoot/id_rsa)
 #return 0
 
 echo "Attempting to obtain auth token"
-echo "curl -k -X GET -sS -I -H "X-Storage-User: Storage-${identitydomain}:${username}" -H "X-Storage-Pass: ${password}" https://${identitydomain}.storage.oraclecloud.com/auth/v1.0"
-authtoken=$(curl -k -X GET -sS -I -H "X-Storage-User: Storage-${identitydomain}:${username}" -H "X-Storage-Pass: ${password}" https://${identitydomain}.storage.oraclecloud.com/auth/v1.0 | grep X-Auth-Token | awk {'print $2'})
+echo "curl -k -X GET -sS -I -H "X-Storage-User:Storage-${identitydomain}:${username}" -H "X-Storage-Pass:${password}" https://${identitydomain}.storage.oraclecloud.com/auth/v1.0"
+authtoken=$(curl -k -X GET -sS -I -H "X-Storage-User:Storage-${identitydomain}:${username}" -H "X-Storage-Pass:${password}" https://${identitydomain}.storage.oraclecloud.com/auth/v1.0 | grep X-Auth-Token | awk {'print $2'})
 curlStatus=$?
 if [[ "$curlStatus" != 0 ]]; then
 	echo "Curl command to get auth token failed"
@@ -50,6 +52,7 @@ if [[ -z "${authtoken}" ]] ; then
 	return 1
 fi
 echo "obtained authorization token"
+#return 0
 
 echo "Attempting to delete old storage"
 echo "curl -k -I -sS -X DELETE -H "X-Auth-Token: ${authtoken}"  https://${identitydomain}.storage.oraclecloud.com/v1/Storage-${identitydomain}/${storagename}"
@@ -126,6 +129,8 @@ fi
 rm -f id_rsa*
 
 echo "Submitting dbca request"
+echo "https_proxy=https://adc-proxy.oracle.com:80"
+export https_proxy=https://adc-proxy.oracle.com:80
 echo "curl -v --include --request POST --cacert ./cacert.pem --user ${username}:${password} --header "X-ID-TENANT-NAME:${identitydomain}" --header "Content-Type:application/json" --data "{ \"description\": \"Example service instance\",  \"edition\": \"EE\",  \"level\": \"PAAS\",  \"serviceName\": \"${servicename}\",  \"shape\": \"oc3\",  \"subscriptionType\": \"MONTHLY\",  \"version\": \"12.1.0.2\",  \"vmPublicKeyText\": \"${sshpublickey}\",  \"parameters\": [ { \"type\": \"db\", \"usableStorage\": \"15\", \"adminPassword\": \"Welcome_1\", \"sid\": \"ORCL\", \"pdbName\": \"PDB1\", \"failoverDatabase\": \"no\", \"backupDestination\": \"BOTH\", \"cloudStorageContainer\": \"Storage-${identitydomain}\/${storagename}\", \"cloudStorageUser\": \"${username}\", \"cloudStoragePwd\": \"${password}\" } ] }" ${dbcsendpoint}/paas/service/dbcs/api/v1.1/instances/${identitydomain}"
 curl --include --request POST --cacert ./cacert.pem --user ${username}:${password} --header "X-ID-TENANT-NAME:${identitydomain}" --header "Content-Type:application/json" --data "{ \"description\": \"Example service instance\",  \"edition\": \"EE\",  \"level\": \"PAAS\",  \"serviceName\": \"${servicename}\",  \"shape\": \"oc3\",  \"subscriptionType\": \"MONTHLY\",  \"version\": \"12.1.0.2\",  \"vmPublicKeyText\": \"${sshpublickey}\",  \"parameters\": [ { \"type\": \"db\", \"usableStorage\": \"15\", \"adminPassword\": \"Welcome_1\", \"sid\": \"ORCL\", \"pdbName\": \"PDB1\", \"failoverDatabase\": \"no\", \"backupDestination\": \"BOTH\", \"cloudStorageContainer\": \"Storage-${identitydomain}\/${storagename}\", \"cloudStorageUser\": \"${username}\", \"cloudStoragePwd\": \"${password}\" } ] }" ${dbcsendpoint}/paas/service/dbcs/api/v1.1/instances/${identitydomain}
 curlStatus=$?
@@ -135,5 +140,5 @@ if [[ "$curlStatus" != 0 ]]; then
 else
 	echo "Successfully submitted request to create database instance"
 fi
-
+#unset https_proxy
 #echo "submitted dbcs for creation"

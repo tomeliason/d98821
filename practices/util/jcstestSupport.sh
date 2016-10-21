@@ -11,6 +11,237 @@
 # 
 #
 
+#
+#
+# jcsIsRunning /path.to/properties.file [default proxy value]
+# Return 0 if the JCS instance is running, > 0 otherwise with an value in errorValue
+# $1 file 
+# return value
+#	0 success
+#	1 file argument missing
+#   2 property file provided but does not exist/cannot be found.
+#   3 various cURL errors, see errorValue for text of full error
+#
+function jcsIsRunning () {
+	local propertyfile=$1
+	local defaultProxyvalue=""
+	local originalDebug=$debug # so we can turn debug off if we want.
+
+	if [[ "$debug" = "1" ]]; then
+		echo "Function name:  ${FUNCNAME}"
+		echo "The number of positional parameter : $#"
+		echo "All parameters or arguments passed to the function: '$@'"
+		echo
+	fi
+	if [[ $# -lt 1 ]]; then
+		errorValue="Error: Missing property file.  ${FUNCNAME} "
+		echo "$errorValue"
+		echo "Usage jcsIsRunning property.file [default proxy]"
+		return 1
+	fi
+	if [[ $# -gt 1 ]]; then
+		defaultProxyvalue=$2
+	fi
+
+	#
+	# Got a properties file
+	# see if file exists
+	if [ ! -f $propertyfile ]; then
+       		echo "Property file '$propertyfile' not found" 
+	       	errorValue="Error: Property file '$propertyfile' not found"
+       		return 2
+	fi
+	
+	
+	#
+	# It appears we need a proxy for accessing the end point
+	# check that one is assigned
+	#
+	if [[ -n "$https_proxy" ]] ; then
+		if [[ "$debug" = "1" ]]; then
+			echo "Using https_proxy = $https_proxy"
+		fi
+	elif  [[ ! -n "$https_proxy" && -n "$defaultProxyvalue" ]] ; then 
+		if [[ "$debug" = "1" ]]; then
+			echo "https_proxy not set and default value of '$defaultProxyvalue' found. Using default https_proxy=$defaultProxyvalue"
+		fi
+		https_proxy=$defaultProxyvalue
+	elif  [[ ! -n "$http_proxy" ]] ; then 
+		# no proxy try and get one from properties
+		getProperty https_proxy $propertyFile
+		if [[ -n "$resultValue" ]]; then
+			echo "Found proxy value in properties file, using https_proxy=$resultValue"
+			https_proxy=$resultValue
+			fi
+	else
+		if [[ "$debug" = "1" ]]; then
+			echo "https_proxy not set, no default provided and not found in $propertyfile, not using https_proxy"
+		fi
+		https_proxy=""
+	fi
+
+	#
+	# Set up environment
+	# 
+	exportProperties $propertyfile
+
+	
+	#if [[ -n "$https_proxy" ]]; then
+	#	echo "Using https_proxy $https_proxy"
+	#fi
+	#
+	# Now run the test
+	#
+	curlCommand="curl -k -i -X GET -u ${opcUsername}:${opcPassword} -H X-ID-TENANT-NAME:${identityDomain}  ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName}"
+	#curl -k -i -X GET -u al.saganich@oracle.com:Welc0me1 -H X-ID-TENANT-NAME:docsjcs3 https://jcs.emea.oraclecloud.com/paas/service/jcs/api/v1.1/instances/docsjcs3/JCS
+	#curl -k -i -X GET -u al.saganich@oracle.com:Welc0me1 -H X-ID-TENANT-NAME:docsjcs3 https://jcs.emea.oraclecloud.com/paas/service/jcs/api/v1.1/instances/docsjcs3/JCS
+	#echo $curlCommand
+	if [[ "$debug" = "1" ]]; then
+		echo "Executing curl request '$curlCommand'"
+	fi
+
+	$curlCommand > fourohfour.out 2>&1
+	fourohfour=`grep 404 fourohfour.out`
+	#echo fourohfour=$fourohfour
+	rm -f fourohfour.out
+	if [[  -n "$fourohfour" ]]; then
+		echo "End point ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${JCSServiceName}/${JCSServiceName} does not appear to exist ($fourohfour)"
+		return 1
+	fi
+
+	curlResponse=$($curlCommand) 2>&1
+	status=`echo $curlResponse |cut -d',' -f 5| cut -d':' -f 2 |tr -d '\"' | sed -e 's/^[ \t]*//'`
+	#echo "status=$status"
+	#status=`echo $curlResponse | cut -d':' -f 5  |tr -d '\"'| sed -e 's/^[ \t]*//'`
+	#echo "JCS end point ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName} status = ${status}"
+	completeStatus="running"
+	#echo 
+	#echo 
+	if [[ "$status" = "$completeStatus" ]] ; then
+		#echo "Exists and is running"
+		echo "End point ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName} exists and is running."
+		return 0
+	else
+		#echo "Exists but not running"
+		echo "End point ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName} exists but is not running. Status=${status}."
+		return 1
+	fi
+	
+	return 1 # how did we get here?
+}
+
+#
+# datebaseIsRunning /path.to/properties.file [default proxy value]
+# Return 0 if the database is running, > 0 otherwise with an value in errorValue
+# $1 file 
+# return value
+#	0 success
+#	1 file argument missing
+#   2 property file provided but does not exist/cannot be found.
+#   3 various cURL errors, see errorValue for text of full error
+#   4 missing certificate file
+#
+function databaseIsRunning () {
+	local propertyfile=$1
+	local defaultProxyvalue=""
+	local originalDebug=$debug # so we can turn debug off if we want.
+
+	if [[ "$debug" = "1" ]]; then
+		echo "Function name:  ${FUNCNAME}"
+		echo "The number of positional parameter : $#"
+		echo "All parameters or arguments passed to the function: '$@'"
+		echo
+	fi
+	if [[ $# -lt 1 ]]; then
+		errorValue="Error: Missing property file.  ${FUNCNAME} "
+		echo "$errorValue"
+		echo "Usage databaseIsRunning property.file "
+		return 1
+	fi
+	if [[ $# -gt 1 ]]; then
+		defaultProxyvalue=$2
+	fi
+
+	#
+	# Got a properties file
+	# see if file exists
+	if [ ! -f $propertyfile ]; then
+       		echo "Property file '$propertyfile' not found" 
+	       	errorValue="Error: Property file '$propertyfile' not found"
+       		return 2
+	fi
+	
+	
+	#
+	# It appears we need a proxy for accessing the db end point
+	# check that one is assigned
+	#
+	if  [[ ! -n "$https_proxy" && -n "$defaultProxyvalue" ]] ; then 
+		if [[ "$debug" = "1" ]]; then
+			echo "https_proxy not set and default value of '$defaultProxyvalue' found. Using default https_proxy=$defaultProxyvalue"
+		fi
+		https_proxy=$defaultProxyvalue
+	elif  [[ ! -n "$http_proxy" ]] ; then 
+		# no proxy try and get one from properties
+		getProperty https_proxy $propertyFile
+		if [[ -n "$resultValue" ]]; then
+			echo "Found proxy value in properties file, using https_proxy=$resultValue"
+			https_proxy=$resultValue
+			fi
+	else
+		if [[ "$debug" = "1" ]]; then
+			echo "https_proxy not set, no default provided and not found in $propertyfile, not using https_proxy"
+		fi
+		https_proxy=""
+	fi
+	
+	if [[ ! -f cacert.pem ]]; then
+	   	errorValue="Error: required cacert.pem file not found"
+		echo $errorValue
+		return 3
+	fi
+
+	#
+	# Set up environment
+	# 
+	exportProperties $propertyfile
+
+	#
+	# Now do the test
+	#
+	curlCommand="curl -s --include --request GET --cacert cacert.pem --user ${opcUsername}:${opcPassword} --header "X-ID-TENANT-NAME:${identityDomain}" ${DBCSEndpoint}/paas/service/dbcs/api/v1.1/instances/${identityDomain}/${DBCSServiceName}"
+	
+	if [[ "$debug" = "1" ]]; then
+		echo "executing '$curlCommand'"
+	fi
+	
+	curlResponse=$($curlCommand)
+	#hack
+	$curlCommand > fourohfour.out 2>&1
+	fourohfour=`grep 404 fourohfour.out`
+	echo fourohfour=$fourohfour
+	rm -f fourohfour.out
+	if [[  -n "$fourohfour" ]]; then
+		echo "DB end point ${dbsendpoint}/paas/service/jcs/api/v1.1/instances/${identitydomain} does not appear to exist ($fourohfour)"
+		return 1
+	fi
+	#echo $curlResponse |cut -d',' -f 4 |cut -d':' -f 2  |tr -d '\"' |tr -d '[[:space:]]' #| tr -d ',\"'
+	#echo curlResponse=$curlResponse
+	#status=`echo $curlResponse | cut -d':' -f 2 | tr -d '[[:space:]]' #| tr -d ',\"'`
+	status=`echo $curlResponse |cut -d',' -f 4 |cut -d':' -f 2  |tr -d '\"' |tr -d '[[:space:]]' #| tr -d ',\"'`
+	echo "DB end point ${dbsendpoint}/paas/service/jcs/api/v1.1/instances/${identitydomain} status = ${status}"
+	if [[ "$status" = "Running" ]] ; then
+		echo "End point ${DBCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/$DBCSServiceName exists and is running."
+		return 0
+	else
+		echo "End point ${DBCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identitydomain}/$DBCSServiceName exists but is not running. Status=${status}."
+		return 1
+	fi
+
+	
+	
+	return 1 # how did we get here?
+}
 
 #
 #

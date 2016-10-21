@@ -12,6 +12,7 @@
 echo curl -i -X GET -u ${opcUsername}:${opcPassword} -H "X-ID-TENANT-NAME:${identityDomain}"  ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName}
 
 curl -i -X GET -u ${opcUsername}:${opcPassword} -H "X-ID-TENANT-NAME:${identityDomain}"  ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName}
+return 0
 
 echo curl --include --request GET --cacert ~/cacert.pem --user ${opcUsername}:${opcPassword} --header "X-ID-TENANT-NAME:${identityDomain}" ${DBCSEndpoint}/paas/service/dbcs/api/v1.1/instances/${identityDomain}/${DBCSServiceName}
 
