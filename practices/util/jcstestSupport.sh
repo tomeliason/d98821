@@ -1,8 +1,6 @@
 #!/bin/bash
 #
 # jcstestSupport.sh
-#
-
 # ------------------------------------------------------------------------
 # -- DISCLAIMER:
 # --    This script is provided for educational purposes only. It is NOT
@@ -13,6 +11,7 @@
 # ------------------------------------------------------------------------
 # 
 #
+
 
 #
 #
