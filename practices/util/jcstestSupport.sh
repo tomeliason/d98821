@@ -94,7 +94,6 @@ function jcsIsRunning () {
 	#
 	curlCommand="curl -k -i -X GET -u ${opcUsername}:${opcPassword} -H X-ID-TENANT-NAME:${identityDomain}  ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName}"
 	#curl -k -i -X GET -u al.saganich@oracle.com:Welc0me1 -H X-ID-TENANT-NAME:docsjcs3 https://jcs.emea.oraclecloud.com/paas/service/jcs/api/v1.1/instances/docsjcs3/JCS
-	#curl -k -i -X GET -u al.saganich@oracle.com:Welc0me1 -H X-ID-TENANT-NAME:docsjcs3 https://jcs.emea.oraclecloud.com/paas/service/jcs/api/v1.1/instances/docsjcs3/JCS
 	#echo $curlCommand
 	if [[ "$debug" = "1" ]]; then
 		echo "Executing curl request '$curlCommand'"
