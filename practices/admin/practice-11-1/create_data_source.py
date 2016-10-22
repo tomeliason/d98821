@@ -23,8 +23,8 @@ password = os.getenv('WLSPassword')
 
 print url
 
-dsname = 'datasource1'
-jndiname = 'datasource1'
+dsname = 'jdbc.AuctionDB'
+jndiname = 'jdbc/AuctionDB'
 clustername = os.getenv('WLSClusterName')
 initialcap = 1
 maxcap = 5
@@ -38,8 +38,8 @@ shrink = 300
 drivername = 'oracle.jdbc.xa.client.OracleXADataSource'
 #driverurl = 'jdbc:oracle:thin:@DB:1521/PDB1.ouopc005.oraclecloud.internal'
 driverurl = os.getenv('DBDSURL')
-driveruser = os.getenv('DBDSUsername')
-driverpassword = os.getenv('DBDSPassword')
+driveruser = os.getenv('DBDSAuctionUsername')
+driverpassword = os.getenv('DBDSAuctionPassword')
 testtable='SQL SELECT 1 FROM DUAL'
 
 # Connect to administration server

@@ -9,8 +9,8 @@
 # -- 
 # ------------------------------------------------------------------------
 
-# function to create a JDBC Data Source named datasource1 using WLST
-createJDBCDataSource_datasource1() {
+# function to create a JDBC Data Source named jdbc.AuctionDB using WLST
+createJDBCDataSource_AuctionDB() {
     
     echo "setting up ssh tunnel for WLST"
     echo ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@remotehost-proxy
