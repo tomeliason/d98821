@@ -9,17 +9,37 @@
 # -- 
 # ------------------------------------------------------------------------
 
-# function to create a JDBC Data Source named jdbc.AuctionDB using WLST
-createJDBCDataSource_AuctionDB() {
-    
+# function to deploy the benefits application to weblogic server
+# environment variables:
+#   - JCSHost        - IP Address of the Admin Server
+#   - WLSDeployPort  - Port of the Admin Server - Administration Port
+#   - WLSUsername    - Admin User
+#   - WLSPassword    - Admin Password
+#   - WLSClusterName - Target Cluster
+
+deployApplication_benefits() {
+
     echo "setting up ssh tunnel for WLST"
-    echo ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@remotehost-proxy
+    echo ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSDeployPort}:${JCSHost}:${WLSDeployPort} opc@remotehost-proxy
 
-    ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@remotehost-proxy
+    ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSDeployPort}:${JCSHost}:${WLSDeployPort} opc@remotehost-proxy
 
-    source $WL_HOME/server/bin/setWLSEnv.sh
-    
-    java weblogic.WLST create_data_source.py
+curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'benefits',targets:['${WLSClusterName}']}" -F "deployment=@./benefits.war" -X POST http://${WLSAdminHost}:${WLSDeployPort}/management/wls/latest/deployments/application
+
+    echo ssh -T -O "exit" remotehost-proxy
+    ssh -T -O "exit" remotehost-proxy
+    echo "terminating ssh tunnel for WLST"
+
+}
+
+deployApplication_SimpleAuctionWebAppDb() {
+
+    echo "setting up ssh tunnel for WLST"
+    echo ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSDeployPort}:${JCSHost}:${WLSDeployPort} opc@remotehost-proxy
+
+    ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSDeployPort}:${JCSHost}:${WLSDeployPort} opc@remotehost-proxy
+
+curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'SimpleAuctionWebAppDb',targets:['${WLSClusterName}']}" -F "deployment=@./SimpleAuctionWebAppDb.war" -X POST http://${WLSAdminHost}:${WLSDeployPort}/management/wls/latest/deployments/application
 
     echo ssh -T -O "exit" remotehost-proxy
     ssh -T -O "exit" remotehost-proxy
@@ -30,6 +50,6 @@ createJDBCDataSource_AuctionDB() {
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "solution.sh" ] ; then
 
-    createJDBCDataSource_datasource1
+    deployApplication_SimpleAuctionWebAppDb
 
 fi
