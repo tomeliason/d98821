@@ -1,34 +1,47 @@
+#!/bin/bash
+
 # ------------------------------------------------------------------------
 # -- DISCLAIMER:
 # --    This script is provided for educational purposes only. It is NOT
 # --    supported by Oracle World Wide Technical Support.
 # --    The script has been tested and appears to work as intended.
 # --    You should always run new scripts on a test instance initially.
-# -- 
+# --
 # ------------------------------------------------------------------------
-CURRENT_PRACTICE=/practices/part1/practice16-01
-echo ">>>Stopping the LDAP Server (in case it is running)"
-LDAP_HOME=/u01/app/ldap
-# first stop the LDAP server (in case it has been started)
-$LDAP_HOME/bin/stop-ds
-# import the two users and the group into the external LDAP system
-# (they were exported by using the export-ldif executable:
-# ./export-ldif -l solution.ldif -n userRoot -h host02.example.com -p 7879 -w Welcome1
-# )
-echo ">>>Importing users/group into the LDAP system"
-$LDAP_HOME/bin/import-ldif -b dc=example,dc=com -n userRoot -l $CURRENT_PRACTICE/ldap/solution.ldif
-# start the LDAP server
-echo ">>>Starting the LDAP Server"
-$LDAP_HOME/bin/start-ds
-# set up the environment for WLST
-source /u01/app/fmw/wlserver/server/bin/setWLSEnv.sh
-# run the script to create the external LDAP authentication provider
-java weblogic.WLST create_ldap_provider.py
 
-# run the script to stop all the managed servers in cluster2
-java weblogic.WLST stop_cluster.py
-# now restart them
-java weblogic.WLST start_cluster.py
-echo ">>>Now you need to go to host01 and deploy the app and stop and start the admin server."
-echo ">>>Find its window. Press Ctrl+C. Then run ./startWebLogic.sh"
+bindir=/practices/part2/bin
+source $bindir/checkoracle.sh
+source $bindir/checkhost01.sh
+bindir=/practices/part2/bin
+source $bindir/wlspassword.sh
+
+#Set deployer command line options
+deployopts="-adminurl host01:7001 -username weblogic -password `cat /practices/part2/.wlspwd` -deploy -targets cluster1"
+deploydir=/practices/part2/apps
+
+#Reset practice to starting state. Ensures no running servers and a clean domain.
+./reset.sh
+
+#Create/add solution files before starting domain
+
+#Run lab scripts
+./genkey.sh
+./certreq.sh
+
+#Copy files to domain
+cp solution/config.xml /u01/domains/part2/wlsadmin/config
+cp *.jks /u01/domains/part2/wlsadmin
+cp *.pem /u01/domains/part2/wlsadmin
+
+#Start AdminServer
+startAdmin.sh
+
+#Deploy practice application
+#Application is already deployed in the solution config.xml file
+
+#Start server1
+startServer1.sh
+
+echo -e "\nWait for all servers to fully start, then continue with the next step.\n"
+
 
