@@ -114,7 +114,7 @@ function jcsIsRunning () {
 	#echo "status=$status"
 	#status=`echo $curlResponse | cut -d':' -f 5  |tr -d '\"'| sed -e 's/^[ \t]*//'`
 	#echo "JCS end point ${JCSEndpoint}/paas/service/jcs/api/v1.1/instances/${identityDomain}/${JCSServiceName} status = ${status}"
-	completeStatus="running"
+	completeStatus="Running"
 	#echo 
 	#echo 
 	if [[ "$status" = "$completeStatus" ]] ; then
@@ -183,7 +183,8 @@ function databaseIsRunning () {
 		https_proxy=$defaultProxyvalue
 	elif  [[ ! -n "$http_proxy" ]] ; then 
 		# no proxy try and get one from properties
-		getProperty https_proxy $propertyFile
+		#echo "getProperty https_proxy $propertyfile"
+		getProperty https_proxy $propertyfile
 		if [[ -n "$resultValue" ]]; then
 			echo "Found proxy value in properties file, using https_proxy=$resultValue"
 			https_proxy=$resultValue
@@ -194,9 +195,16 @@ function databaseIsRunning () {
 		fi
 		https_proxy=""
 	fi
+
+	#echo "getProperty UTILITY_DIR $propertyfile"
+	getProperty UTILITY_DIR $propertyfile
+	local utilDir=$resultValue
 	
-	if [[ ! -f cacert.pem ]]; then
-	   	errorValue="Error: required cacert.pem file not found"
+	local CertFile="${utilDir}/../common/cacert.pem"
+
+	
+	if [[ ! -f "$CertFile" ]]; then
+	   	errorValue="Error: required $CertFile file not found"
 		echo $errorValue
 		return 3
 	fi
@@ -209,7 +217,7 @@ function databaseIsRunning () {
 	#
 	# Now do the test
 	#
-	curlCommand="curl -s --include --request GET --cacert cacert.pem --user ${opcUsername}:${opcPassword} --header "X-ID-TENANT-NAME:${identityDomain}" ${DBCSEndpoint}/paas/service/dbcs/api/v1.1/instances/${identityDomain}/${DBCSServiceName}"
+	curlCommand="curl -s --include --request GET --cacert $CertFile --user ${opcUsername}:${opcPassword} --header "X-ID-TENANT-NAME:${identityDomain}" ${DBCSEndpoint}/paas/service/dbcs/api/v1.1/instances/${identityDomain}/${DBCSServiceName}"
 	
 	if [[ "$debug" = "1" ]]; then
 		echo "executing '$curlCommand'"
@@ -324,7 +332,7 @@ function confirmJCSEnvironment() {
 		echo "  curlBaseURL ='${curlBaseURL}'"	
 		echo
 	fi
-	echo `$curlCOMMAND`
+	#echo `$curlCOMMAND`
     curlResult=$($curlCOMMAND) > /dev/null 2>&1
 	curl_status=$?
 	if [[ -n "$outputFile" ]]; then
@@ -371,7 +379,7 @@ Check the value of:"
 	#
 	# First validate that we have a cert 
 	# 
-	local certFile="${UTILITY_DIR}/cacert.pem"
+	local certFile="${UTILITY_DIR}/../common/cacert.pem"
 	
 	if [[ "$debug" = "1" ]]; then
 		echo
@@ -440,5 +448,64 @@ Check the value of:"
 	echo WLS ADMIN IP: ${wls_ip}
 	echo OTD IP: ${otd_ip}
 	echo DB IP: ${db_ip}
+	return 0
+}
+
+#
+#
+# addToEtcHosts hostname ip rootpwd
+# For example:
+# addToEtcHosts jcshost 140.86.39.90 welcome1
+# Returns 
+#	0 on success
+#	1 on already exists 
+#
+function addToEtcHosts() {
+
+	if [[ "$debug" = "1" ]]; then
+		echo "Function name:  ${FUNCNAME}"
+		echo "The number of positional parameter : $#"
+		echo "All parameters or arguments passed to the function: '$@'"
+		echo
+	fi
+
+	if [[ $# -ne 3 ]]; then
+		errorValue="Error: Usage: addToEtcHost hostname ip rootPWD"
+		echo "$errorValue"
+		return 1
+	fi
+
+	
+	local hostName=$1
+	local ipAddress=$2
+	local rootPwd=$3
+	if [[ "$debug" = "1" ]]; then
+		echo "Attempting to add '$hostName' with ip '$ipAddress' to /etc/hosts using rootpwd '$rootPwd'"
+	fi
+
+	#
+	# Look for it already there, do nothing if present
+	#
+	match_count=`grep -i $hostName /etc/hosts | wc -l`
+	if [[ "$match_count" -gt 0 ]]; then
+		if [[ "$debug" = "1" ]]; then
+			echo "Found $matchcount instances of $hostName in /etc/hosts nothing to do, exiting."
+		fi
+		return 1
+	fi
+	if [[ "$debug" = "1" ]]; then
+		echo "Found $matchcount instances of $hostName in /etc/hosts adding entry."
+	fi
+
+	#
+	# add it
+	#
+	if [[ "$debug" = "1" ]]; then
+		echo "Found $matchcount instances of $hostname in /etc/hosts adding entry."
+		echo "Adding ${ipAddress} ${hostName} to /etc/hosts"
+	fi
+
+	echo $rootPwd | su root -c "echo \"$ipAddress $hostName\" >> /etc/hosts" > /dev/null 2>&1
+
 	return 0
 }

@@ -116,9 +116,22 @@ function getProperty() {
 		return 5
 	fi
 
+	if [[ "$debug" = "1" ]]; then
+		echo "Expecting match, using match line '$match_line'"
+	fi
+
+
+	if [[ "$match_line" == "" ]]; then
+		if [[ "$debug" = "1" ]]; then
+			echo "Not matching lines"
+		fi
+		
+		resultValue=""
+		return 0
+	fi
+
 	#
 	# If we are here we there are no dups
-	# So get the 
 	# 
 	# Now parse the file getting the left and right portions of the key
 	# 

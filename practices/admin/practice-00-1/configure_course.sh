@@ -12,8 +12,77 @@
 
 #
 # First configure common environment scripts, functions etc
-#
+# Common functions go into the /practices/utils, single use functions are here.
 source /practices/util/setenv.sh
+
+
+#
+# SSH public and private keys are stored by default into ~/.ssh/
+# This function copies these files from /practices/common to make sure all are insynch with the
+# preconfigured JCS environment
+#
+function setupSSH() {
+
+	if [[ "$debug" = "1" ]]; then
+		echo "Function name:  ${FUNCNAME}"
+		echo "The number of positional parameter : $#"
+		echo "All parameters or arguments passed to the function: '$@'"
+		echo
+	fi
+
+	#
+	# SSH public and private keys are stored by default into
+	# ~/.ssh/ if it doesn't exist create it
+	#
+
+	if [[ ! -d ~/.ssh ]]; then
+		if [[ "$debug" = "1" ]]; then
+			echo "Making ~/.ssh"
+		fi
+		mkdir ~/.ssh
+	fi
+
+	#
+	# Now seed the directory with /practices/common/id*
+	# 
+	if [[ -e ~/.ssh/id_rsa.pub || -e ~/.ssh/id_rsa  ]]; then
+		
+		echo "Found existing SSH Keys, ~/.ssh/id_rsa*"
+		while true ; do
+			read -p "Overwrite? Y/n [Y]" answer
+			# default is yes
+			if [[ -z "$answer" ]]; then
+				answer="Y"
+			fi
+			case $answer in
+			   [yY]* )
+				echo "Removing and replacing existing SSH keys"
+				rm -rf ~/.ssh/id_rsa* >> /dev/null 2>&1 
+				break ;;	
+			   [nN]* ) 
+				echo "Retaining existing SSH keys"
+				return 0;
+				exit ;;
+			   * )  echo "unknown value '$answer'"; 
+				continue ;;
+			esac
+		done
+
+	fi
+
+	if [[ "$debug" = "1" ]]; then
+		echo "Copying files from /practices/common/id_rsa* to ~/.ssh/"
+		cp -v /practices/common/id_rsa* ~/.ssh/
+	else
+		cp /practices/common/id_rsa* ~/.ssh/
+	fi
+	echo "~/.ssh/ seeded with common SSH Keys"
+	return 0
+}
+
+#
+# 
+#
 
 if [[ -f /practices/admin/.initialized ]] ; then
 	
@@ -109,6 +178,32 @@ addToEtcHosts dbhost $resultValue $rootPWD
 
 getProperty wls_ip /practices/common/common.properties
 addToEtcHosts jcshost $resultValue $rootPWD
+
+
+#
+# Now set up SSH Keys
+#
+setupSSH
+
+#
+# And finally, create an ssh config file with a remote host proxy vale
+#
+getProperty wls_ip /practices/common/common.properties
+#
+# We should tell if we are overwriting...
+#
+if [[ -e ~/.ssh/config ]]; then
+	rm -rf ~/.ssh/config >> /dev/null 2>&1
+fi
+getProperty wls_ip /practices/common/common.properties
+proxyIp=$resultValue
+echo "#" > ~/.ssh/config 
+echo "# Generated do not update" >> ~/.ssh/config 
+echo "#" >> ~/.ssh/config 
+echo "Host remotehost-proxy" >> ~/.ssh/config 
+echo "    HostName $proxyIp" >> ~/.ssh/config 
+echo "    ControlPath ~/.ssh/remotehost-proxy.ctl" >> ~/.ssh/config 
+echo "Created ~/.ssh/config"
 
 echo "Completed!"
 

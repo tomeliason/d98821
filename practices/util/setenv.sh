@@ -37,7 +37,7 @@ functionsList="propertiesSupport.sh environmentSupport.sh jcstestSupport.sh"
 #
 for file in $functionsList; do 
 	source $CURRENT_DIR/$file
-	echo "sourcing $CURRENT_DIR/$file"
+	#echo "sourcing $CURRENT_DIR/$file"
 done
 
 #
