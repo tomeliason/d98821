@@ -9,6 +9,9 @@
 # --
 # ------------------------------------------------------------------------
 #
+if [[ ! -f /practices/admin/.initialized ]] ; then
+	echo ". /practices/util/setenv.sh" >> $HOME/.bashrc
+fi
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #echo "CURRENT_DIR=$CURRENT_DIR as dir"
@@ -18,6 +21,8 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #
 #echo setting path = `echo $PATH | sed "s=:$CURRENT_DIR==g"`:$CURRENT_DIR
 export PATH=`echo $PATH | sed "s=:$CURRENT_DIR==g"`:$CURRENT_DIR
+
+
 
 #
 # Set prompt to user@host:\shortened working directory >
@@ -41,6 +46,24 @@ for file in $functionsList; do
 done
 
 #
-# Lastly add the current directory to the common properties file as UTILITY_DIR
+# Add the current directory to the common properties file as UTILITY_DIR
 #
-setProperty UTILITY_DIR $CURRENT_DIR  $CURRENT_DIR/../common/common.properties
+setProperty UTILITY_DIR $CURRENT_DIR  /practices/common/common.properties
+
+#
+# Export all common.properties
+#  
+exportProperties /practices/common/common.properties
+
+#
+# Automatically set up wls env
+# WL_HOME comes from common.properties via exportProperties
+#
+if [ -z `echo $CLASSPATH | grep "wls.classpath.jar"` ]; then
+    . "${WL_HOME}/server/bin/setWLSEnv.sh" >/dev/null
+fi
+
+# JAVA_HOME comes from common.properties via exportProperties
+
+export PATH=`echo $PATH | sed "s=:$JAVA_HOME/bin==g"`:$JAVA_HOME/bin
+
