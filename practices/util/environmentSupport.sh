@@ -9,6 +9,67 @@
 # --
 # ------------------------------------------------------------------------
 
+
+#
+# Start an SSH tunnel
+#
+function startSSHTunnel() {
+	if [[ "$debug" = "1" ]]; then
+		echo "Function name:  ${FUNCNAME}"
+		echo "The number of positional parameter : $#"
+		echo "All parameters or arguments passed to the function: '$@'"
+		echo
+	fi
+
+	if [[ $# -ne 2 ]]; then
+		echo "Usage:"
+		echo " ${FUNCNAME} localPort remoteHost:remotePort"
+		errorValue="Error: parameter  ${FUNCNAME} "
+		echo "$errorValue"
+		return 1
+	fi
+
+
+	local localPort=$1
+	local remoteCombo=$2
+
+	if [[ "$debug" = "1" ]]; then
+		echo "Attempting to set up ssh tunnel from ${localPort} to ${remoteCombo}"
+	fi
+	#
+	# -L localport:remotehost:remoteport
+	# -N no remote command
+	# -T disable pseudo terminal
+	# -M master mode (accept slave connections
+	# -f run in background (does not work in bash for some reason)
+	# 
+	echo "Setting up SSH tunnel"
+	tunnelCmd="ssh -i /home/oracle/.ssh/id_rsa -f -N -T -M -L ${localPort}:${remoteCombo} opc@remotehost-proxy"
+	echo "${tunnelCmd}"
+	`${tunnelCmd}` > /dev/null 2>&1 &
+	return $?
+}
+
+#
+# Shut down an existing tunnel ( as evidenced by a reote proxy control file which itself is a socket )
+#
+function stopSSHTunnel() {
+
+	#
+	# Shut down the tunnel if its active.
+	#
+	if [[ -S ~/.ssh/remotehost-proxy.ctl ]]; then
+		#remote tunnel exists
+		echo ssh -T -O "exit" remotehost-proxy
+    		ssh -T -O "exit" remotehost-proxy > /dev/null 2>&1
+	
+	else
+		echo "No remote tunnel currently active"
+	fi
+	return 0
+}
+
+
 #
 # configureUserVariables /path/to/properties file
 # configureUserVariables /practices/common/common.properties
