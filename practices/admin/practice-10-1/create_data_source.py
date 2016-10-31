@@ -37,9 +37,9 @@ trustidle = 60
 shrink = 300
 drivername = 'oracle.jdbc.xa.client.OracleXADataSource'
 #driverurl = 'jdbc:oracle:thin:@DB:1521/PDB1.ouopc005.oraclecloud.internal'
-driverurl = os.getenv('DBDSURL')
-driveruser = os.getenv('DBDSAuctionUsername')
-driverpassword = os.getenv('DBDSAuctionPassword')
+driverurl = os.getenv('DBCSURL')
+driveruser = os.getenv('DBCSAuctionUsername')
+driverpassword = os.getenv('DBCSAuctionPassword')
 testtable='SQL SELECT 1 FROM DUAL'
 
 # Connect to administration server
