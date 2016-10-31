@@ -17,7 +17,7 @@ function createDB() {
 
 	if [[ $# -ne 3 ]]; then
 		echo "Usage:"
-		echo " ${FUNCNAME} iddomain iduser idpassword"
+		echo " ${FUNCNAME} iddomain iduser idpassword [dbcsendpoint [storagename]]"
 		errorValue="Error: parameter  ${FUNCNAME} "
 		echo "$errorValue"
 		return 1
@@ -26,9 +26,25 @@ function createDB() {
 	local iddomain=$1
 	local iduser=$2
 	local idpassword=$3
+
+	
+	local storagename=$StorageName
+	local dbcsendpoint=$DBCSEndpoint
+	if [[ $# -ge 4 ]]; then
+		echo "Using $4 as DBCSendpoint"
+		dbcsendpoint=$4
+	fi
+	if [[ $# -ge 5 ]]; then
+		echo "Using $5 as storagename"
+		storagename=$5
+	fi
+
 	
 	echo "Attempting to create database resource for user '$iduser':'$idpassword' in ID '$iddomain'"
-	return 0;
+
+	#
+	# Short curcuit the script for testing. 
+	#	
 
 
 	rsaRoot=`realpath ~`/.ssh
@@ -69,6 +85,9 @@ function createDB() {
 		return 1
 	fi
 	echo "obtained authorization token"
+
+	ech0 "Short circuit exit from createDB"
+	return 0;
 
 	echo "Attempting to delete old storage"
 	echo "curl -k -I -sS -X DELETE -H "X-Auth-Token: ${authtoken}"  https://${iddomain}.storage.oraclecloud.com/v1/Storage-${iddomain}/${storagename}"
