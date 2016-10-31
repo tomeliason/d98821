@@ -13,16 +13,16 @@
 createJDBCDataSource_AuctionDatabase() {
     
     echo "setting up ssh tunnel for WLST"
-    echo ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@remotehost-proxy
+    echo ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${jcshost}
 
-    ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@remotehost-proxy
+    ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${jcshost}
 
     source $WL_HOME/server/bin/setWLSEnv.sh
     
     java weblogic.WLST create_data_source.py
 
-    echo ssh -T -O "exit" remotehost-proxy
-    ssh -T -O "exit" remotehost-proxy
+    echo ssh -T -O "exit" ${jcshost}
+    ssh -T -O "exit" ${jcshost}
     echo "terminating ssh tunnel for WLST"
 
 }
