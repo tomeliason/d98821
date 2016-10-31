@@ -9,16 +9,16 @@
 # -- 
 # ------------------------------------------------------------------------
 
-# setup script
+# reset deploying an application with weblogic server console
 
 
 # if this script is called as a main script, execute the function 
-if [ ${0##*/} == "setup.sh" ] ; then
+if [ ${0##*/} == "reset.sh" ] ; then
 
-        echo ">>> Setting up the practice environment for Practice 11-2"
+        echo ">>> Resetting the practice environment for Practice 10-1"
 
         echo ">>> "
         
-        echo ">>> Practice 11-2 environment has been setup."
+        echo ">>> Practice 10-1 environment has been reset."
 
 fi

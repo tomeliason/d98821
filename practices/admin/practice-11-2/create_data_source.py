@@ -23,8 +23,8 @@ password = os.getenv('WLSPassword')
 
 print url
 
-dsname = 'jdbc.AuctionDatabase'
-jndiname = 'jdbc/AuctionDatabase'
+dsname = 'jdbc.AuctionDB'
+jndiname = 'jdbc/AuctionDB'
 clustername = os.getenv('WLSClusterName')
 initialcap = 1
 maxcap = 5
