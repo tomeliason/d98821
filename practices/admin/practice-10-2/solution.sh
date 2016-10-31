@@ -9,7 +9,7 @@
 # -- 
 # ------------------------------------------------------------------------
 
-# function to create a JDBC Data Source named jdbc.AuctionDB using WLST
+# function to create a JDBC Data Source named jdbc.AuctionDatabase using WLST
 createJDBCDataSource_AuctionDatabase() {
     
     echo "setting up ssh tunnel for WLST"
