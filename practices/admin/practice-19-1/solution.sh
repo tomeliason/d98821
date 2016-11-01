@@ -12,32 +12,23 @@
 bindir=/practices/part2/bin
 source $bindir/checkoracle.sh
 source $bindir/checkhost01.sh
-bindir=/practices/part2/bin
 source $bindir/wlspassword.sh
 
 #Set deployer command line options
 deployopts="-adminurl host01:7001 -username weblogic -password `cat /practices/part2/.wlspwd` -deploy -targets cluster1"
-deploydir=/practices/part2/apps
+deploydir=$PWD/resources
 
 #Reset practice to starting state. Ensures no running servers and a clean domain.
 ./reset.sh
 
-#Create/add solution files before starting domain
-
-#Run lab scripts
-./genkey.sh
-./certreq.sh
-
-#Copy files to domain
-cp solution/config.xml /u01/domains/part2/wlsadmin/config
-cp *.jks /u01/domains/part2/wlsadmin
-cp *.pem /u01/domains/part2/wlsadmin
-
 #Start AdminServer
 startAdmin.sh
 
-#Deploy practice application
-#Application is already deployed in the solution config.xml file
+#Deploy the application without using its deployment descriptor security settings
+java weblogic.Deployer $deployopts -securityModel CustomRolesAndPolicies $deploydir/SimpleAuctionWebAppDbSec
+
+#Create users, groups, roles, and policies from LDAP
+wlst.sh createSecurityArtifacts.py
 
 #Start server1
 startServer1.sh

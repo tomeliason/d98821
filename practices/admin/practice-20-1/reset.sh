@@ -26,5 +26,8 @@ fi
 
 #Reset practice files
 
+#Remove keystore and pem files from practice folder
+rm -f *.jks *.pem
+
 
 
