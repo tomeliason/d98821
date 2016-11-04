@@ -11,6 +11,21 @@
 
 # setup script
 
+
+deployApplication_contacts() {
+
+    echo "setting up ssh tunnel for WLST"
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
+    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
+
+curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'contacts',targets:['${WLSClusterName}']}" -F "deployment=@./contacts.war" -X POST http://localhost:${WLSAdminPort}/management/wls/latest/deployments/application
+
+    echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    echo "terminating ssh tunnel for WLST"
+
+}
+
 # function to create a JDBC Data Source named datasource1 using WLST
 createJDBCDataSource_datasource1() {
     
@@ -32,13 +47,8 @@ createJDBCDataSource_datasource1() {
 
 }
 
-# if this script is called as a main script, execute the function 
-if [ ${0##*/} == "setup.sh" ] ; then
-
-        echo ">>> Setting up the practice environment for Practice 11-3"
-
-        echo ">>> Creating contact data"
-        
+createContactData() {
+    
         ssh oracle@${DBCSHost} "echo \"ALTER USER \"ORACLE\" IDENTIFIED BY \"ORACLE\" DEFAULT TABLESPACE \"USERS\" TEMPORARY TABLESPACE \"TEMP\" ACCOUNT UNLOCK;\" | sqlplus ${DBCSUsername}/${DBCSPassword}@PDB1 "
 
         ssh oracle@${DBCSHost} "echo \"ALTER USER \"ORACLE\" DEFAULT ROLE \"DBA\",\"CONNECT\",\"RESOURCE\";\" | sqlplus ${DBCSUsername}/${DBCSPassword}@PDB1 "
@@ -63,6 +73,17 @@ if [ ${0##*/} == "setup.sh" ] ; then
         
         ssh oracle@${DBCSHost} "echo \"COMMIT;\" | sqlplus ${DBCSUsername}/${DBCSPassword}@PDB1 "
 
+}
+
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "setup.sh" ] ; then
+
+        echo ">>> Setting up the practice environment for Practice 11-3"
+
+        echo ">>> Creating contact data"
+        
+        #createContactData
+
         echo ">>> Finished creating data"
         
         echo ">>> Creating data source"
@@ -70,6 +91,12 @@ if [ ${0##*/} == "setup.sh" ] ; then
         createJDBCDataSource_datasource1
 
         echo ">>> Finished creating data source"
+        
+        echo ">>> Deploying application"
+         
+        #deployApplication_contacts
+        
+        echo ">>> Finished deploying application"
         
         echo ">>> Practice 11-3 environment has been setup."
 

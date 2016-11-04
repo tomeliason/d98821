@@ -23,8 +23,8 @@ password = os.getenv('WLSPassword')
 
 print url
 
-dsname = 'jdbc.datasource1'
-jndiname = 'jdbc/datasource1'
+dsname = 'datasource1'
+jndiname = 'datasource1'
 clustername = os.getenv('WLSClusterName')
 initialcap = 1
 maxcap = 5

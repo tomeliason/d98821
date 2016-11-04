@@ -35,13 +35,13 @@ curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:
 deployApplication_SimpleAuctionWebAppDb() {
 
     echo "setting up ssh tunnel for WLST"
-    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${jcshost}
-    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${jcshost}
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${JCSHost}
+    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${JCSHost}
 
 curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'SimpleAuctionWebAppDb',targets:['${WLSClusterName}']}" -F "deployment=@./SimpleAuctionWebAppDb.war" -X POST http://localhost:${WLSAdminPort}/management/wls/latest/deployments/application
 
-    echo ssh -S jcs-ctrl-socket -O "exit" opc@${jcshost}
-    ssh -S jcs-ctrl-socket -O "exit" opc@${jcshost}
+    echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
     echo "terminating ssh tunnel for WLST"
 
 }
