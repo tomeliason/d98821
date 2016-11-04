@@ -15,8 +15,8 @@
 createJDBCDataSource_AuctionDB() {
     
     echo "setting up ssh tunnel for WLST"
-    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${jcshost}
-    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${jcshost}
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCShost}:${WLSAdminPort} opc@${JCShost}
+    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCShost}:${WLSAdminPort} opc@${JCShost}
 
     source $WL_HOME/server/bin/setWLSEnv.sh
     
@@ -26,8 +26,8 @@ createJDBCDataSource_AuctionDB() {
         
     java weblogic.WLST create_data_source.py
 
-    echo ssh -S jcs-ctrl-socket -O "exit" opc@${jcshost}
-    ssh -S jcs-ctrl-socket -O "exit" opc@${jcshost}
+    echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCShost}
+    ssh -S jcs-ctrl-socket -O "exit" opc@${JCShost}
     echo "terminating ssh tunnel for WLST"
 
 }

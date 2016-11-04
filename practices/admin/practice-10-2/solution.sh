@@ -13,8 +13,8 @@
 createJDBCDataSource_AuctionDatabase() {
     
     echo "setting up ssh tunnel for WLST"
-    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${jcshost}
-    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${jcshost}
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
+    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
     export DBCSURL="jdbc:oracle:thin:@DB:1521/PDB1.${identityDomain}.oraclecloud.internal"
     export DBCSAuctionUsername=ORACLE
@@ -24,8 +24,8 @@ createJDBCDataSource_AuctionDatabase() {
     
     java weblogic.WLST create_data_source.py
 
-    echo ssh -S jcs-ctrl-socket -O "exit" opc@${jcshost}
-    ssh -S jcs-ctrl-socket -O "exit" opc@${jcshost}
+    echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
     echo "terminating ssh tunnel for WLST"
 
 }
