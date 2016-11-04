@@ -29,7 +29,7 @@ connectionDefaults.defaultHeaders = \
 headers0= \
   [ NVPair('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), ]
 
-url0 = 'https://otdhost'
+url0 = 'http://otdhost/'
 
 # START
 request101 = createRequest(Test(101, 'GET contacts'), url0, headers0)
