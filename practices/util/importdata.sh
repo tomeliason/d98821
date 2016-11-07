@@ -8,7 +8,7 @@ sshprivatekey=$(<~/.ssh/id_rsa)
 
 echo "copying dump file"
 
-#scp wlsadmin.oracle.dmp oracle@${DBCSHost}:/home/oracle
+scp wlsadmin.oracle.dmp oracle@${DBCSHost}:/home/oracle
 
 echo "configuring"
 
