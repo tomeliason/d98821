@@ -18,7 +18,7 @@ url = 't3://' + os.getenv('WLSAdminHost') + ':' + os.getenv('WLSAdminPort')
 username = os.getenv('WLSUsername')
 password = os.getenv('WLSPassword')
 
-print '>>>Connectiong to ' + url
+print '>>>Connecting to ' + url
 
 # Connect to administration server
 connect(username, password, url)
