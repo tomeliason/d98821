@@ -82,7 +82,7 @@ if [ ${0##*/} == "setup.sh" ] ; then
 
         echo ">>> Creating contact data"
         
-        #createContactData
+        createContactData
 
         echo ">>> Finished creating data"
         
@@ -94,7 +94,7 @@ if [ ${0##*/} == "setup.sh" ] ; then
         
         echo ">>> Deploying application"
          
-        #deployApplication_contacts
+        deployApplication_contacts
         
         echo ">>> Finished deploying application"
         
