@@ -29,6 +29,10 @@ describeEnvironment() {
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "solution.sh" ] ; then
 
+    echo ">>> Executing solution for Practice 07-7"
+
     describeEnvironment
+        
+    echo ">>> The solution for Practice 07-7 has been completed."
 
 fi

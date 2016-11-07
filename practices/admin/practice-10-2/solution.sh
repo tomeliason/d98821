@@ -33,6 +33,10 @@ createJDBCDataSource_AuctionDatabase() {
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "solution.sh" ] ; then
 
+    echo ">>> Executing solution for Practice 10-2"
+
     createJDBCDataSource_AuctionDatabase
+
+    echo ">>> The solution for Practice 10-2 has been completed."
 
 fi

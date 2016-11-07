@@ -49,6 +49,10 @@ curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "solution.sh" ] ; then
 
+    echo ">>> Executing solution for Practice 11-2"
+
     deployApplication_SimpleAuctionWebAppDb
+
+    echo ">>> The solution for Practice 11-2 has been completed."
 
 fi

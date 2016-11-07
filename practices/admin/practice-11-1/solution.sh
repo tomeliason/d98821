@@ -35,8 +35,8 @@ curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:
 deployApplication_SimpleAuctionWebAppDb() {
 
     echo "setting up ssh tunnel for WLST"
-    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${JCSHost}
-    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${jcshost}:${WLSAdminPort} opc@${JCSHost}
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
+    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
 curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'SimpleAuctionWebAppDb',targets:['${WLSClusterName}']}" -F "deployment=@./SimpleAuctionWebAppDb.war" -X POST http://localhost:${WLSAdminPort}/management/wls/latest/deployments/application
 
@@ -49,7 +49,11 @@ curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "solution.sh" ] ; then
 
+    echo ">>> Executing solution for Practice 11-1"
+
     ./setup.sh
     deployApplication_SimpleAuctionWebAppDb
+
+    echo ">>> The solution for Practice 11-1 has been completed."
 
 fi
