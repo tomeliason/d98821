@@ -28,6 +28,9 @@ otd_admin_url=`echo $response | sed -e 's/^.*"otd_admin_url"[ ]*:[ ]*"//' -e 's/
 wls_ip=`echo $wls_admin_url | grep -oE "\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b"`
 otd_ip=`echo $otd_admin_url | grep -oE "\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b"`
 
+export jcshost=$wls_ip
+export otdhost=$otd_ip
+
 response=$(curl -s --include --request GET --cacert ~/cacert.pem --user ${opcUsername}:${opcPassword} --header "X-ID-TENANT-NAME:${identityDomain}" ${DBCSEndpoint}/paas/service/dbcs/api/v1.1/instances/${identityDomain}/${DBCSServiceName})
 
 db_address=`echo $response | sed -e 's/^.*"em_url"[ ]*:[ ]*"//' -e 's/".*//'`
