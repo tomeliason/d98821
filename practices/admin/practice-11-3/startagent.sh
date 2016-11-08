@@ -1,2 +1,2 @@
 source setgrinderenv.sh
-java -classpath $CLASSPATH net.grinder.Grinder $GRINDERPROPS
+java -Dcom.sun.net.ssl.checkRevocation=false -classpath $CLASSPATH net.grinder.Grinder $GRINDERPROPS
