@@ -82,13 +82,13 @@ if [ ${0##*/} == "setup.sh" ] ; then
 
         echo ">>> Creating contact data"
         
-        createContactData
+        #createContactData
 
         echo ">>> Finished creating data"
         
         echo ">>> Creating data source"
 
-        createJDBCDataSource_datasource1
+        #createJDBCDataSource_datasource1
 
         echo ">>> Finished creating data source"
         
