@@ -116,7 +116,7 @@ echo "You will need the values for the following:"
 #
 # Note this is a duplication of the same set in environmentSupport.sh
 #
-propertySet="identityDomain opcUsername opcPassword DBCSEndpoint JCSEndpoint RootPWD"
+propertySet="identityDomain opcUsername opcPassword DBCSEndpoint DBCSServiceName JCSEndpoint JCSServiceName RootPWD"
 echo " $propertySet"
 
 echo "Are you ready to  configure the course environment?"

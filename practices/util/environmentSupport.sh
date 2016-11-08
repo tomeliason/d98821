@@ -108,7 +108,7 @@ function configureUserVariables() {
 	#
 	# Note this is a duplication of the same set in practice00-1/configure_course.sh
 	#
-	local propertySet="identityDomain opcUsername opcPassword DBCSEndpoint JCSEndpoint RootPWD"
+	local propertySet="identityDomain opcUsername opcPassword DBCSEndpoint DBCSServiceName JCSEndpoint JCSServiceName RootPWD"
 	local defaultValue=""
 	#
 	# Loop over the query propery set querying for each

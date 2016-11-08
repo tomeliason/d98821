@@ -491,6 +491,8 @@ function addToEtcHosts() {
 		if [[ "$debug" = "1" ]]; then
 			echo "Found $matchcount instances of $hostName in /etc/hosts nothing to do, exiting."
 		fi
+                echo "Warning: Unexpectedly found ${hostname} in /etc/hosts!"
+                echo "         could not add $ipAddress $hostName"
 		return 1
 	fi
 	if [[ "$debug" = "1" ]]; then
