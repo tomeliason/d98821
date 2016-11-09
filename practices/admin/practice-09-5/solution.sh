@@ -20,6 +20,7 @@
 function startSSHTunnel {
 
     echo "setting up ssh tunnel for WLST "
+    echo "ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${WLSAdminHost}:${WLSAdminPort} opc@remotehost-proxy"
     ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSAdminPort}:${WLSAdminHost}:${WLSAdminPort} opc@remotehost-proxy
 }
 
@@ -89,13 +90,14 @@ if [ ${0##*/} == "solution.sh" ] ; then
 
     ./setup.sh
   
-    #startSSHTunnel
+    startSSHTunnel
+    source $WL_HOME/server/bin/setWLSEnv.sh
     listKnownWLSServers
     getServerName
     
     stopNamedServer $serverName
     read -p "Please access one of the WLS or FMW Consoles to confirm server $serverName is stopped, hit enter when confirmed" answer
     startNamedServer $serverName
-    #stopSSHTunnel  
+    stopSSHTunnel  
 
 fi

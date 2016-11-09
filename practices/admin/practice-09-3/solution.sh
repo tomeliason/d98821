@@ -103,6 +103,7 @@ if [ ${0##*/} == "solution.sh" ] ; then
     getServerName
     
     stopNamedServer $serverName
+    echo
     read -p "Please access one of the WLS or FMW Consoles to confirm server $serverName is stopped, hit enter when confirmed" answer
     startNamedServer $serverName
     stopSSHTunnel  

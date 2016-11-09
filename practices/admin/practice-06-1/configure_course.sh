@@ -147,7 +147,7 @@ done
 #
 # First configure common environment scripts, functions etc
 #
-source ../../util/setenv.sh
+source /practices/util/setenv.sh
 
 #
 # Now configure the course variables

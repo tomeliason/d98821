@@ -369,7 +369,10 @@ Check the value of:"
 	setProperty wls_admin_url $wls_admin_url $propertyfile
 	setProperty otd_admin_url $otd_admin_url $propertyfile
 	setProperty wls_ip $wls_ip $propertyfile
+	setProperty JCSHost $wls_ip $propertyfile
+
 	setProperty otd_ip $otd_ip $propertyfile
+	setProperty OTDHost $otd_ip $propertyfile
 
 
 	#
@@ -440,6 +443,7 @@ Check the value of:"
 	setProperty db_address $db_address $propertyfile
 	setProperty db_connect $db_connect $propertyfile
 	setProperty db_ip $db_ip $propertyfile
+	setProperty DBCSHost $db_ip $propertyfile
 	
 	echo WLS ADMIN URL: ${wls_admin_url}
 	echo OTD ADMIN URL: ${otd_admin_url}
