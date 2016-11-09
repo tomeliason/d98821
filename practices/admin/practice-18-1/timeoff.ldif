@@ -1,0 +1,41 @@
+version: 1
+
+dn: dc=example,dc=com
+objectClass: domain
+objectClass: top
+dc: example
+
+dn: ou=groups,dc=example,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+dn: ou=people,dc=example,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: people
+
+dn: sn=moeh,ou=people,dc=example,dc=com
+objectClass: person
+objectClass: top
+cn: moeh
+sn: moeh
+userPassword:: e1NTSEE1MTJ9OXhaL1JKWVVEVFh0N08waTRNS1dDMjYxckZhSlFXZEQ4UURzQ
+ nZEOENKd0ZpMTIwRlFGNThMaVF4eTJnamRnbjJCam5COXRBek1HM1FpRHNBUlVuMkQrSzRzQjE0
+ TGxY
+
+dn: sn=larryf,ou=people,dc=example,dc=com
+objectClass: person
+objectClass: top
+cn: larryf
+sn: larryf
+userPassword:: e1NTSEE1MTJ9Q1YvTHBBb2l0OHN1S3U0UHhTcmpxbUcyRWhBaFZrY3JMNExiN
+ Vg1VHVrL3JDZkljYjZhS0hlcGltbHFTMDJ5bG5ScFViQ3MrSitGcEZxd0VDMzhyMC9MY3Ivb0pK
+ bEMv
+
+dn: cn=boss,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+objectClass: top
+cn: boss
+member: sn=moeh,ou=people,dc=example,dc=com
+
