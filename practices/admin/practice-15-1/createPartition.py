@@ -7,38 +7,32 @@
 # --
 # ------------------------------------------------------------------------
 
+# environment variables:
+#   - JCSHost        - IP Address of the Admin Server
+#   - WLSDeployPort  - Port of the Admin Server - Administration Port
+#   - WLSUsername    - Admin User
+#   - WLSPassword    - Admin Password
+#   - WLSClusterName - Target Cluster
+
 #Conditionally import wlstModule only when script is executed with jython
 if __name__ == '__main__': 
     from wlstModule import *#@UnusedWildImport
     
-
 import sys;
 
-password=''
-if ( len (sys.argv) >= 2 ): 
-    password=sys.argv[1]
+url = 't3://' + os.getenv('WLSAdminHost') + ':' + os.getenv('WLSAdminPort')
+username = os.getenv('WLSUsername')
+password = os.getenv('WLSPassword')
 
-#print "Password = '%s' " % password
+clustername = os.getenv('WLSClusterName')
 
-url = 'host01:7001'
-username = 'weblogic'
 virtualTarget="exampleVT"
 virtualTargetPrefix='/example'
 partitionName = 'exampleDP'
 
-
-#
-# The wrapper script should capture the WLS password
-# so in theory we should never be here, but just in case
-if (password == ''):
-    password = "".join (java.lang.System.console().readPassword("%s",["Please enter the password from the course practice environment: Security Credentials for the weblogi use for Oracle WebLogic Server: "]))
-#else:
-#    print "using captured password %s" % password
-
-
 # Connect to administration server
 connect(username, password, url)
-print 'Connected to domain'
+print '>>> Connected to domain'
 
 edit()
 startEdit()
@@ -53,10 +47,8 @@ try:
 except WLSTException:
 	pass
 
-print 'Creating new virtualTarget ' + virtualTarget + '.'
+print '>>> Creating new virtualTarget ' + virtualTarget + '.'
 
-#domain=getMBean('/')
-#domain.createVirtualTarget(virtualTarget)
 cd('/')
 cmo.createVirtualTarget(virtualTarget)
 
@@ -79,13 +71,13 @@ try:
 except WLSTException:
 	pass
 
-print 'Creating new domain partition  ' + partitionName + '.'
+print '>>> Creating new domain partition  ' + partitionName + '.'
 
 cd ('/')
 cmo.createPartition(partitionName)
 
 cd('/Partitions/'+partitionName+'/SystemFileSystem/'+partitionName)
-cmo.setRoot('/u01/domains/part2/wlsadmin/partitions/'+partitionName+'/system')
+cmo.setRoot('/u01/data/domains/JCS_domain/partitions/'+partitionName+'/system')
 cmo.setCreateOnDemand(true)
 cmo.setPreserved(true)
 
@@ -95,8 +87,11 @@ cmo.createResourceGroup('default')
 set('AvailableTargets',jarray.array([ObjectName('com.bea:Name='+virtualTarget+',Type=VirtualTarget')], ObjectName))
 set('DefaultTargets',jarray.array([ObjectName('com.bea:Name='+virtualTarget+',Type=VirtualTarget')], ObjectName))
 
-activate()
+activate(block='true')
 print 'activated newly created partition'
+
+domain=getMBean('/')
+startPartitionWait(domain.lookupPartition(partitionName))
 
 disconnect()
 

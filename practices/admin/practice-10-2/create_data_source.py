@@ -48,12 +48,12 @@ connect(username, password, url)
 # Check if data source already exists
 try:
 	cd('/JDBCSystemResources/' + dsname)
-	print '>>>The JDBC Data Source ' + dsname + ' already exists.'
+	print '>>> The JDBC Data Source ' + dsname + ' already exists.'
 	exit()
 except WLSTException:
 	pass
 
-print '>>>Creating a new generic JDBC data source named ' + dsname + '.'
+print '>>> Creating a new generic JDBC data source named ' + dsname + '.'
 
 # start an edit session
 edit()
@@ -107,6 +107,6 @@ jdbcresource.addTarget(target)
 # Activate changes
 save()
 activate(block='true')
-print '>>>Data source created successfully!'
+print '>>> Data source created successfully!'
 exit()
 

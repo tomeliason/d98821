@@ -19,7 +19,7 @@
 
 deployApplication_benefits() {
 
-    echo "setting up ssh tunnel for WLST"
+    echo ">>> Setting up ssh tunnel for WLST"
     echo ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSDeployPort}:${JCSHost}:${WLSDeployPort} opc@remotehost-proxy
 
     ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSDeployPort}:${JCSHost}:${WLSDeployPort} opc@remotehost-proxy
@@ -28,13 +28,13 @@ curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:
 
     echo ssh -T -O "exit" remotehost-proxy
     ssh -T -O "exit" remotehost-proxy
-    echo "terminating ssh tunnel for WLST"
+    echo ">>> Terminating ssh tunnel for WLST"
 
 }
 
 deployApplication_SimpleAuctionWebAppDb() {
 
-    echo "setting up ssh tunnel for WLST"
+    echo ">>> Setting up ssh tunnel for WLST"
     echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
     ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
@@ -42,7 +42,7 @@ curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:
 
     echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
     ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
-    echo "terminating ssh tunnel for WLST"
+    echo ">>> Terminating ssh tunnel for WLST"
 
 }
 

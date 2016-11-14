@@ -14,7 +14,7 @@
 # function to create a JDBC Data Source named jdbc.AuctionDB using WLST
 createJDBCDataSource_AuctionDB() {
     
-    echo "setting up ssh tunnel for WLST"
+    echo ">>> Setting up ssh tunnel for WLST"
     echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCShost}:${WLSAdminPort} opc@${JCShost}
     ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCShost}:${WLSAdminPort} opc@${JCShost}
 
@@ -28,7 +28,7 @@ createJDBCDataSource_AuctionDB() {
 
     echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCShost}
     ssh -S jcs-ctrl-socket -O "exit" opc@${JCShost}
-    echo "terminating ssh tunnel for WLST"
+    echo ">>> Terminating ssh tunnel for WLST"
 
 }
 

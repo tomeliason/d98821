@@ -14,7 +14,7 @@
 
 deployApplication_contacts() {
 
-    echo "setting up ssh tunnel for WLST"
+    echo ">>> Setting up ssh tunnel for WLST"
     echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
     ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
@@ -22,14 +22,14 @@ curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:
 
     echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
     ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
-    echo "terminating ssh tunnel for WLST"
+    echo ">>> Terminating ssh tunnel for WLST"
 
 }
 
 # function to create a JDBC Data Source named datasource1 using WLST
 createJDBCDataSource_datasource1() {
     
-    echo "setting up ssh tunnel for WLST"
+    echo ">>> Setting up ssh tunnel for WLST"
     echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
     ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
@@ -43,7 +43,7 @@ createJDBCDataSource_datasource1() {
 
     echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
     ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
-    echo "terminating ssh tunnel for WLST"
+    echo ">>> Terminating ssh tunnel for WLST"
 
 }
 

@@ -9,52 +9,59 @@
 # --
 # ------------------------------------------------------------------------
 
-practicedir=/practices/part2/practice13-01
-bindir=/practices/part2/bin
-source $bindir/checkoracle.sh
-source $bindir/checkhost01.sh
-#
-source $bindir/wlspassword.sh
-#
+# environment variables:
+#   - JCSHost        - IP Address of the Admin Server
+#   - WLSAdminHost   - 
+#   - WLSDeployPort  - Port of the Admin Server - Administration Port
+#   - WLSUsername    - Admin User
+#   - WLSPassword    - Admin Password
+#   - WLSClusterName - Target Cluster
 
-#Set deployer command line options
+practicedir=/practices/admin/practice-15-1
 
+# function to create a partition using WLST
+createPartition() {
+    
+    echo ">>> Setting up ssh tunnel for WLST"
 
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
+    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
-#Reset practice to starting state.
-./reset.sh 
+    source $WL_HOME/server/bin/setWLSEnv.sh
+        
+    java weblogic.WLST createPartition.py
 
-#Start AdminServer
-echo -e "\nStarting AdminServer\n"
-startAdmin.sh
+    echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    echo ">>> Terminating ssh tunnel for WLST"
 
-#Start managed servers
-# not required for the partitioned work
-#echo -e "\nStarting Managed Servers\n"
-#startServer1.sh &
-#startServer2.sh &
-#sleep 60
-wlspwd=`cat /practices/part2/.wlspwd` 
-echo -e "\n Creating partition"
-$MW_HOME/wlserver/common/bin/wlst.sh /practices/part2/practice13-01/createPartition.py `cat /practices/part2/.wlspwd`
+}
 
-#$echo -e "\n Restarting the admin server"
-#Ensure we are starting with a clean shut down domain
-$bindir/killServers.sh
-ssh host02 'bash -c /practices/part2/bin/killServers.sh'
-startAdmin.sh
-$MW_HOME/wlserver/common/bin/wlst.sh /practices/part2/practice13-01/startPartition.py `cat /practices/part2/.wlspwd`
+# function to deploy the shopping cart application
+deployShoppingCart() {
+    
+    echo ">>> Setting up ssh tunnel"
 
-deployopts="-adminurl host01:7001/AuctionDP -username weblogic -password `cat /practices/part2/.wlspwd` -deploy "
-deploydir=/practices/part2/apps
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
+    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
-#This script is run after students have manually started the domain and before using the domain
+curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'ShoppingCart',targets:['${WLSClusterName}']}" -F "deployment=@./ShoppingCart.war" -X POST http://localhost:${WLSAdminPort}/management/wls/latest/deployments/application
 
-#The solution script calls reset.sh before running this script to ensure a clean starting point
+    echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
 
-#Perform deployment tasks
-echo -e "\nDeploying applications for this practice\n"
-deployopts="-adminurl host01:7001 -partition exampleDP -username weblogic -password `cat /practices/part2/.wlspwd` -deploy "
-deploydir=/practices/part2/apps
-java weblogic.Deployer $deployopts $deploydir/ShoppingCart.war
+    echo ">>> Terminating ssh tunnel"
+
+}
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "solution.sh" ] ; then
+
+    echo ">>> Executing solution for Practice 15-1"
+
+    createPartition
+    deployShoppingCart
+        
+    echo ">>> The solution for Practice 15-1 has been completed."
+
+fi
 
