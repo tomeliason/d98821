@@ -45,7 +45,7 @@ deployShoppingCart() {
     echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
     ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
-curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'ShoppingCart',targets:['${WLSClusterName}']}" -F "deployment=@./ShoppingCart.war" -X POST http://localhost:${WLSAdminPort}/management/wls/latest/deployments/application
+curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'ShoppingCart',targets:['${WLSClusterName}']}" -F "deployment=@./ShoppingCart.war" -X POST http://localhost:${WLSAdminPort}/exampleDP/management/weblogic/latest/edit/partitions/exampleDP/resourceGroups/default/appDeployments
 
     echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
     ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}

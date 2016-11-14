@@ -39,7 +39,7 @@ startEdit()
 
 
 # Check if virtual target already exists
-# fails is existed and was deleted. Cached?
+# fails is existed and was deleted. 
 try:
 	cd('/VirtualTargets/' + virtualTarget);
 	print 'Virtual target ' + virtualTarget + ' already exists.'
@@ -54,16 +54,16 @@ cmo.createVirtualTarget(virtualTarget)
 
 cd('/VirtualTargets/' + virtualTarget)
 cmo.setUriPrefix(virtualTargetPrefix)
-set('Targets',jarray.array([ObjectName('com.bea:Name=AdminServer,Type=Server')], ObjectName))
+set('Targets',jarray.array([ObjectName('com.bea:Name='+clustername+',Type=Cluster')], ObjectName))
 
-print 'Virtual target' +virtualTarget +' created successfully with prefix '+virtualTargetPrefix+'.'
+print '>>> Virtual target' +virtualTarget +' created successfully with prefix '+virtualTargetPrefix+'.'
 
 #
 # Now create the domain partition
 #
 
 # Check if virtual target already exists
-# fails is existed and was deleted. Cached?
+# fails is existed and was deleted. 
 try:
 	cd('/Partitions/'+partitionName)
 	print 'Partition '+ partitionName+' already exists.'
@@ -88,10 +88,12 @@ set('AvailableTargets',jarray.array([ObjectName('com.bea:Name='+virtualTarget+',
 set('DefaultTargets',jarray.array([ObjectName('com.bea:Name='+virtualTarget+',Type=VirtualTarget')], ObjectName))
 
 activate(block='true')
-print 'activated newly created partition'
+print '>>> Activated newly created domain partition'
 
 domain=getMBean('/')
 startPartitionWait(domain.lookupPartition(partitionName))
+
+print '>>> Started domain partition'
 
 disconnect()
 
