@@ -6,31 +6,63 @@
 # --    supported by Oracle World Wide Technical Support.
 # --    The script has been tested and appears to work as intended.
 # --    You should always run new scripts on a test instance initially.
-# --
+# -- 
 # ------------------------------------------------------------------------
 
-bindir=/practices/part2/bin
-source $bindir/checkoracle.sh
-source $bindir/checkhost01.sh
-source $bindir/wlspassword.sh
+# setup script
 
-#Set deployer command line options
-deployopts="-adminurl host01:7001 -username weblogic -password `cat /practices/part2/.wlspwd` -deploy -targets cluster1"
-deploydir=$PWD/resources
+# function to create a JDBC Data Source named jdbc.AuctionDB using WLST
+createJDBCDataSource_AuctionDB() {
+    
+    echo ">>> Setting up ssh tunnel for WLST"
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
+    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
-#Reset practice to starting state. Ensures no running servers and a clean domain.
-./reset.sh
+    source $WL_HOME/server/bin/setWLSEnv.sh
+    
+    export DBCSURL="jdbc:oracle:thin:@DB:1521/PDB1.${identityDomain}.oraclecloud.internal"
+    export DBCSAuctionUsername=ORACLE
+    export DBCSAuctionPassword=ORACLE
+        
+    java weblogic.WLST create_data_source.py
 
-# Create database
-createDatabase.sh
+    echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    echo ">>> Terminating ssh tunnel for WLST"
 
-#Start AdminServer
-startAdmin.sh
+}
 
-#Deploy the application without using its deployment descriptor security settings
-java weblogic.Deployer $deployopts -securityModel CustomRolesAndPolicies $deploydir/SimpleAuctionWebAppDbSec
+deployApplication_SimpleAuctionWebAppDbSec() {
 
-#Start server1
-startServer1.sh
+    echo ">>> Setting up ssh tunnel for WLST"
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
+    #ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
-echo -e "\nWait for all servers to fully start, then continue with the next step.\n"
+#curl -v -u ${WLSUsername}:${WLSPassword} -k -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'SimpleAuctionWebAppDbSec',securityDDModel:'CustomRolesAndPolicies',targets:[{identity: ['clusters','${WLSClusterName}']} ]}" -F "sourcePath=@./SimpleAuctionWebAppDbSec.war" -X POST https://${JCSHost}:7002/management/weblogic/latest/edit/appDeployments
+
+    echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    #ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    echo ">>> Terminating ssh tunnel for WLST"
+
+}
+
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "setup.sh" ] ; then
+
+        echo ">>> Setting up the practice environment for Practice 19-1"
+
+        echo ">>> Creating the data source"
+        
+        createJDBCDataSource_AuctionDB
+        
+        echo ">>> The data source has been created."
+        
+        echo ">>> Deploying the application"
+        
+        deployApplication_SimpleAuctionWebAppDbSec
+        
+        echo ">>> The application has been deployed."
+
+        echo ">>> Practice 19-1 environment has been setup."
+
+fi

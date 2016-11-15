@@ -6,15 +6,15 @@ sshprivatekey=none
 sshpublickey=$(<~/.ssh/id_rsa.pub)
 sshprivatekey=$(<~/.ssh/id_rsa)
 
-echo "copying dump file"
+echo ">>> Copying dump file to "${DBCSHost}
 
 scp wlsadmin.oracle.dmp oracle@${DBCSHost}:/home/oracle
 
-echo "configuring"
+echo ">>> Configuring import directory"
 
 ssh oracle@${DBCSHost} "echo \"create or replace directory o_home as '/home/oracle';\" | sqlplus ${DBCSUsername}/${DBCSPassword}@PDB1 "
 
-echo "importing data"
+echo ">>> Importing data"
 
 ssh oracle@${DBCSHost} "impdp ${DBCSUsername}/${DBCSPassword}@PDB1 DIRECTORY=O_HOME DUMPFILE=wlsadmin.oracle.dmp FULL=Y"
 
@@ -22,4 +22,4 @@ ssh oracle@${DBCSHost} "echo \"ALTER USER \"ORACLE\" IDENTIFIED BY \"ORACLE\" DE
 
 ssh oracle@${DBCSHost} "echo \"ALTER USER \"ORACLE\" DEFAULT ROLE \"DBA\",\"CONNECT\",\"RESOURCE\";\" | sqlplus ${DBCSUsername}/${DBCSPassword}@PDB1 "
 
-echo "finished importing data"
+echo ">>> Finished importing data"

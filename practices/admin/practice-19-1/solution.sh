@@ -6,33 +6,39 @@
 # --    supported by Oracle World Wide Technical Support.
 # --    The script has been tested and appears to work as intended.
 # --    You should always run new scripts on a test instance initially.
-# --
+# -- 
 # ------------------------------------------------------------------------
 
-bindir=/practices/part2/bin
-source $bindir/checkoracle.sh
-source $bindir/checkhost01.sh
-source $bindir/wlspassword.sh
+# function to deploy the benefits application to weblogic server
+# environment variables:
+#   - JCSHost        - IP Address of the Admin Server
+#   - WLSDeployPort  - Port of the Admin Server - Administration Port
+#   - WLSUsername    - Admin User
+#   - WLSPassword    - Admin Password
+#   - WLSClusterName - Target Cluster
 
-#Set deployer command line options
-deployopts="-adminurl host01:7001 -username weblogic -password `cat /practices/part2/.wlspwd` -deploy -targets cluster1"
-deploydir=$PWD/resources
+deployApplication_SimpleAuctionWebAppDbSec() {
 
-#Reset practice to starting state. Ensures no running servers and a clean domain.
-./reset.sh
+    echo ">>> Setting up ssh tunnel for WLST"
+    echo ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
+    ssh -i ~/.ssh/id_rsa -M -S jcs-ctrl-socket -fnNTL ${WLSAdminPort}:${JCSHost}:${WLSAdminPort} opc@${JCSHost}
 
-#Start AdminServer
-startAdmin.sh
+curl -v -u ${WLSUsername}:${WLSPassword} -H "X-Requested-By:MyClient" -H Accept:application/json -H Content-Type:multipart/form-data -F "model={name:'SimpleAuctionWebAppDb',targets:['${WLSClusterName}']}" -F "deployment=@./SimpleAuctionWebAppDb.war" -X POST http://localhost:${WLSAdminPort}/management/wls/latest/deployments/application
 
-#Deploy the application without using its deployment descriptor security settings
-java weblogic.Deployer $deployopts -securityModel CustomRolesAndPolicies $deploydir/SimpleAuctionWebAppDbSec
+    echo ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    ssh -S jcs-ctrl-socket -O "exit" opc@${JCSHost}
+    echo ">>> Terminating ssh tunnel for WLST"
 
-#Create users, groups, roles, and policies from LDAP
-wlst.sh createSecurityArtifacts.py
+}
 
-#Start server1
-startServer1.sh
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "solution.sh" ] ; then
 
-echo -e "\nWait for all servers to fully start, then continue with the next step.\n"
+    echo ">>> Executing solution for Practice 19-1"
 
+    ./setup.sh
+    deployApplication_SimpleAuctionWebAppDb
 
+    echo ">>> The solution for Practice 19-1 has been completed."
+
+fi
