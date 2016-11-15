@@ -9,39 +9,14 @@
 # --
 # ------------------------------------------------------------------------
 
-bindir=/practices/part2/bin
-source $bindir/checkoracle.sh
-source $bindir/checkhost01.sh
-bindir=/practices/part2/bin
-source $bindir/wlspassword.sh
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "solution.sh" ] ; then
 
-#Set deployer command line options
-deployopts="-adminurl host01:7001 -username weblogic -password `cat /practices/part2/.wlspwd` -deploy -targets cluster1"
-deploydir=/practices/part2/apps
+    echo ">>> Executing solution for Practice 20-1"
 
-#Reset practice to starting state. Ensures no running servers and a clean domain.
-./reset.sh
+    ./setup.sh
+    deployApplication_SimpleAuctionWebAppDb
 
-#Create/add solution files before starting domain
+    echo ">>> The solution for Practice 20-1 has been completed."
 
-#Run lab scripts
-./genkey.sh
-./certreq.sh
-
-#Copy files to domain
-cp solution/config.xml /u01/domains/part2/wlsadmin/config
-cp *.jks /u01/domains/part2/wlsadmin
-cp *.pem /u01/domains/part2/wlsadmin
-
-#Start AdminServer
-startAdmin.sh
-
-#Deploy practice application
-#Application is already deployed in the solution config.xml file
-
-#Start server1
-startServer1.sh
-
-echo -e "\nWait for all servers to fully start, then continue with the next step.\n"
-
-
+fi

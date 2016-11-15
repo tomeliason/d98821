@@ -9,30 +9,15 @@
 # --
 # ------------------------------------------------------------------------
 
-bindir=/practices/part2/bin
-source $bindir/checkoracle.sh
-source $bindir/checkhost01.sh
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "solution.sh" ] ; then
 
-#Set practice folders
-dependent=$PWD/../practice11-01
-practice=$PWD
+    echo ">>> Executing solution for Practice 19-2"
 
-#This script runs the solution for practice13-01 and then performs configuration for practice13-02
+    ./setup.sh
+    deployApplication_SimpleAuctionWebAppDb
 
-#Call the setup for the dependent practice to set up all dependencies.
-cd $dependent
-./solution.sh
-cd $practice
+    echo ">>> The solution for Practice 19-2 has been completed."
 
-#Configure auditing using WLST online because servers are running
-wlst.sh createAuditProvider.py
-
-#Restart servers because a provider was created
-echo "Restarting servers to realize changes."
-killServers.sh
-startAdmin.sh
-startServer1.sh
-
-echo -e "\nWait for all servers to fully start, then continue with the next step.\n"
-
+fi
 

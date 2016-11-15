@@ -9,27 +9,12 @@
 # --
 # ------------------------------------------------------------------------
 
-bindir=/practices/part2/bin
-source $bindir/checkoracle.sh
-source $bindir/checkhost01.sh
-source $bindir/wlspassword.sh
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "setup.sh" ] ; then
 
-#Set deployer command line options
-deployopts="-adminurl host01:7001 -username weblogic -password `cat /practices/part2/.wlspwd` -deploy -targets cluster1"
-deploydir=/practices/part2/apps
+        echo ">>> Setting up the practice environment for Practice-20-1"
 
-#Reset practice to starting state. Ensures no running servers and a clean domain.
-./reset.sh
+        echo ">>> Practice 20-1 environment has been setup."
 
-#Start AdminServer
-startAdmin.sh
-
-#Deploy practice application
-java weblogic.Deployer $deployopts $deploydir/SimpleAuctionWebApp.war
-
-#Start server1
-startServer1.sh
-
-echo -e "\nWait for all servers to fully start, then continue with the next step.\n"
-
+fi
 
