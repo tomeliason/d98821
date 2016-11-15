@@ -9,22 +9,15 @@
 # --
 # ------------------------------------------------------------------------
 
-#This script resets practice files, the domain, and the environment to its original state
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "reset.sh" ] ; then
 
-bindir=/practices/part2/bin
-source $bindir/checkoracle.sh
-source $bindir/checkhost01.sh
+        echo ">>> Resetting the practice environment for Practice 18-3"
 
-#Handle args
-#If -skip arg comes in this is called by cleanup.sh to cleanup the entire set of practices
-#In this case, skip calling cleanup.sh because it is in charge already
-if [ "$1" != "-skip" ]; then 
-    #Reset original domain and env
-    cleanup.sh
-    echo -e "\nDomain, environment, and practice all reset to original state.\n"
+        echo ">>> "
+        
+        echo ">>> Practice 18-3 environment has been reset."
+
 fi
-
-#Reset practice files
-
 
 
