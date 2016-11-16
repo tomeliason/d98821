@@ -88,7 +88,8 @@ function startNamedServer {
     echo "Attempting to [re]start server '$serverName'"
     cmd="curl -v --user ${WLSUsername}:${WLSPassword} -H X-Requested-By:MyClient -H Accept:application/json -X POST http://${WLSAdminHost}:${WLSDeployPort}/management/wls/latest/servers/id/${serverName}/start"
     echo $cmd
-    $cmd
+    result=`$cmd`
+    echo result = $result
     return $?
 }
 

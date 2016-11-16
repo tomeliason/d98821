@@ -22,6 +22,10 @@ if [ ${0##*/} == "setup.sh" ] ; then
         #ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSDeployPort}:${JCSHost}:${WLSDeployPort} opc@remotehost-proxy
 
 	#source $WL_HOME/server/bin/setWLSEnv.sh
+
+	PYTHONPATH=/opt/python/bin
+	#export PATH=`echo $PATH | sed "s=:$PYTHONPATH==g"`:$PYTHONPATH
+
         echo ">>> "      
         echo ">>> $(basename $(pwd)) environment has been setup."
 fi
