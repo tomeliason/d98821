@@ -67,7 +67,7 @@ function undeployApplication {
 	fi
         #echo "Application found, checking state"
 	activeApplication=`grep ACTIVE testDeploy.out`
-	!echo activeApplication=$activeApplication
+	#echo activeApplication=$activeApplication
 	if [[  ! -n "$activeApplication" ]]; then
     	    echo "Application $whichApplication, found but not active, skipping stop"
 	else
