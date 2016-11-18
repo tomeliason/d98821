@@ -11,6 +11,7 @@
 
 # reset deploying an application with weblogic server console
 
+source `pwd`/.remove_data_source
 
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "reset.sh" ] ; then
@@ -18,6 +19,7 @@ if [ ${0##*/} == "reset.sh" ] ; then
         echo ">>> Resetting the practice environment for Practice 10-2"
 
         echo ">>> "
+	deleteJDBCDataSource_AuctionDatabase
         
         echo ">>> Practice 10-2 environment has been reset."
 

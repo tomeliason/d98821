@@ -1,0 +1,22 @@
+function startSSHTunnel {
+
+    ssh -i ~/.ssh/id_rsa -f -N -T -M -L ${WLSDeployPort}:${JCSHost}:${WLSDeployPort} opc@remotehost-proxy > /dev/null 2>&1
+}
+
+function stopSSHTunnel {
+
+    ssh -T -O "exit" remotehost-proxy > /dev/null 2>&1
+
+}
+
+function deleteJDBCDataSource_AuctionDatabase() {
+    
+    startSSHTunnel
+    curl -v --user ${WLSUsername}:${WLSPassword} \
+           -H X-Requested-By:MyClient \
+           -H Accept:application/json \
+	   -H Content-Type:application/json \
+           -X DELETE http://localhost:7001/management/wls/latest/datasources/id/jdbc.AuctionDatabase  > /dev/null 2>&1
+    stopSSHTunnel
+}
+

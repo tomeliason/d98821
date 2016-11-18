@@ -11,6 +11,8 @@
 
 # setup script
 
+source `pwd`/.remove_data_source
+
 
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "setup.sh" ] ; then
@@ -18,6 +20,8 @@ if [ ${0##*/} == "setup.sh" ] ; then
         echo ">>> Setting up the practice environment for Practice 10-2"
 
         echo ">>> "
+	deleteJDBCDataSource_AuctionDatabase
+
         
         echo ">>> Practice 10-2 environment has been setup."
 
