@@ -12,11 +12,11 @@
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "solution.sh" ] ; then
 
-    echo ">>> Executing solution for Practice 20-1"
+    echo ">>> Executing solution for Practice 22-1"
 
     ./setup.sh
     deployApplication_SimpleAuctionWebAppDb
 
-    echo ">>> The solution for Practice 20-1 has been completed."
+    echo ">>> The solution for Practice 22-1 has been completed."
 
 fi

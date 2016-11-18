@@ -9,25 +9,11 @@
 # --
 # ------------------------------------------------------------------------
 
-# environment variables:
-#   - JCSHost        - IP Address of the Admin Server
-#   - WLSAdminHost   - 
-#   - WLSDeployPort  - Port of the Admin Server - Administration Port
-#   - WLSUsername    - Admin User
-#   - WLSPassword    - Admin Password
-#   - WLSClusterName - Target Cluster
-
-practicedir=/practices/admin/practice-18-1
-
 # if this script is called as a main script, execute the function 
-if [ ${0##*/} == "solution.sh" ] ; then
+if [ ${0##*/} == "setup.sh" ] ; then
 
-    echo ">>> Executing solution for Practice 18-1"
-
-    createPartition
-    deployShoppingCart
+        echo ">>> Setting up the practice environment for Practice 18-1"
         
-    echo ">>> The solution for Practice 18-1 has been completed."
+        echo ">>> Practice 18-1 environment has been setup."
 
 fi
-

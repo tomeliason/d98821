@@ -9,19 +9,11 @@
 # --
 # ------------------------------------------------------------------------
 
-ORACLE_COMMON=/u01/app/fmw/oracle_common/common/bin/
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "setup.sh" ] ; then
 
-#This script puts the wlsadmin domain into the starting state required for this practice
+        echo ">>> Setting up the practice environment for Practice 15-1"
+        
+        echo ">>> Practice 15-1 environment has been setup."
 
-bindir=/practices/part2/bin
-source $bindir/checkoracle.sh
-source $bindir/checkhost01.sh
-
-#Reset practice to starting state. Ensures no running servers and a clean domain.
-./reset.sh
-
-#Start AdminServer
-startAdmin.sh
-
-echo -e "\nWait for all Admin Server to fully start, then continue with the next step.\n"
-
+fi

@@ -12,9 +12,9 @@
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "setup.sh" ] ; then
 
-        echo ">>> Setting up the practice environment for Practice-20-1"
+        echo ">>> Setting up the practice environment for Practice-22-1"
 
-        echo ">>> Practice 20-1 environment has been setup."
+        echo ">>> Practice 22-1 environment has been setup."
 
 fi
 

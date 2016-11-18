@@ -9,30 +9,25 @@
 # --
 # ------------------------------------------------------------------------
 
-bindir=/practices/part2/bin
-source $bindir/checkoracle.sh
-source $bindir/checkhost01.sh
-source $bindir/wlspassword.sh
+# environment variables:
+#   - JCSHost        - IP Address of the Admin Server
+#   - WLSAdminHost   - 
+#   - WLSDeployPort  - Port of the Admin Server - Administration Port
+#   - WLSUsername    - Admin User
+#   - WLSPassword    - Admin Password
+#   - WLSClusterName - Target Cluster
 
-#Set deployer command line options
-deployopts="-adminurl host01:7001 -username weblogic -password `cat /practices/part2/.wlspwd` -deploy -targets cluster1"
-deploydir=$PWD/resources
+practicedir=/practices/admin/practice-18-3
 
-#Reset practice to starting state. Ensures no running servers and a clean domain.
-./reset.sh
+# if this script is called as a main script, execute the function 
+if [ ${0##*/} == "solution.sh" ] ; then
 
-#Start AdminServer
-startAdmin.sh
+    echo ">>> Executing solution for Practice 18-3"
 
-#Deploy the application without using its deployment descriptor security settings
-java weblogic.Deployer $deployopts -securityModel CustomRolesAndPolicies $deploydir/SimpleAuctionWebAppDbSec
+    createPartition
+    deployShoppingCart
+        
+    echo ">>> The solution for Practice 18-3 has been completed."
 
-#Create users, groups, roles, and policies from LDAP
-wlst.sh createSecurityArtifacts.py
-
-#Start server1
-startServer1.sh
-
-echo -e "\nWait for all servers to fully start, then continue with the next step.\n"
-
+fi
 
