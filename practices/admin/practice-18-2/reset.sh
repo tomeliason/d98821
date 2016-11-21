@@ -9,14 +9,16 @@
 # --
 # ------------------------------------------------------------------------
 
+#This script resets practice files, the domain, and the environment to its original state
+
 # if this script is called as a main script, execute the function 
 if [ ${0##*/} == "reset.sh" ] ; then
 
-        echo ">>> Resetting the practice environment for Practice 18-3"
+        echo ">>> Resetting the practice environment for Practice 18-2"
 
-        echo ">>>  "
+        echo ">>> "
         
-        echo ">>> Practice 18-3 environment has been reset."
+        echo ">>> Practice 18-2 environment has been reset."
 
 fi
 

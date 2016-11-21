@@ -10,14 +10,10 @@
 # ------------------------------------------------------------------------
 
 # if this script is called as a main script, execute the function 
-if [ ${0##*/} == "reset.sh" ] ; then
+if [ ${0##*/} == "setup.sh" ] ; then
 
-        echo ">>> Resetting the practice environment for Practice 18-3"
-
-        echo ">>>  "
+        echo ">>> Setting up the practice environment for Practice 17-1"
         
-        echo ">>> Practice 18-3 environment has been reset."
+        echo ">>> Practice 17-1 environment has been setup."
 
 fi
-
-

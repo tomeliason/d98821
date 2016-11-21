@@ -9,17 +9,22 @@
 # --
 # ------------------------------------------------------------------------
 
-#This script resets practice files, the domain, and the environment to its original state
+# environment variables:
+#   - JCSHost        - IP Address of the Admin Server
+#   - WLSAdminHost   - 
+#   - WLSDeployPort  - Port of the Admin Server - Administration Port
+#   - WLSUsername    - Admin User
+#   - WLSPassword    - Admin Password
+#   - WLSClusterName - Target Cluster
+
+practicedir=/practices/admin/practice-17-2
 
 # if this script is called as a main script, execute the function 
-if [ ${0##*/} == "reset.sh" ] ; then
+if [ ${0##*/} == "solution.sh" ] ; then
 
-        echo ">>> Resetting the practice environment for Practice 18-1"
-
-        echo ">>>  "
+    echo ">>> Executing solution for Practice 17-2"
         
-        echo ">>> Practice 18-1 environment has been reset."
+    echo ">>> The solution for Practice 17-2 has been completed."
 
 fi
-
 
