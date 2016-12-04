@@ -4,25 +4,12 @@
 #
 # ORACLE DOCKERFILES PROJECT
 # --------------------------
-# This is the Dockerfile for Oracle WebLogic Server 12.2.1.2 Generic Distro
+# This is the Dockerfile for d98821
 # 
-# REQUIRED FILES TO BUILD THIS IMAGE
-# ----------------------------------
-# (1) fmw_12.2.1.2.0_wls_Disk1_1of1.zip 
-#     Download the Generic installer from http://www.oracle.com/technetwork/middleware/weblogic/downloads/wls-for-dev-1703574.html 
-#
-# (2) server-jre-8uXX-linux-x64.tar.gz
-#     Download from http://www.oracle.com/technetwork/java/javase/downloads/server-jre8-downloads-2133154.html 
-#
 # HOW TO BUILD THIS IMAGE
 # -----------------------
-# Put all downloaded files in the same directory as this Dockerfile
 # Run: 
-#      $ docker build -f Dockerfile.generic -t oracle/weblogic:12.2.1.2-generic . 
-#
-# IMPORTANT
-# ---------
-# The resulting image of this Dockerfile contains a WLS Empty Domain.
+#      $ docker build -f Dockerfile.generic -t oracle/d98821
 #
 # Pull base image
 # From the Oracle Registry
@@ -37,11 +24,9 @@ RUN mkdir /u01 && \
     chown oracle:oracle -R /u01 && \
     echo oracle:oracle | chpasswd && \
     mkdir /u01/oracle && \
-    chown oracle:oracle -R /u01/oracle
-
-RUN su -c "git clone https://github.com/tomeliason/d98821.git" - oracle
-
-RUN ln -s /u01/oracle/d98821/practices /practices && \
+    chown oracle:oracle -R /u01/oracle && \
+    su -c "git clone https://github.com/tomeliason/d98821.git" - oracle && \
+    ln -s /u01/oracle/d98821/practices /practices && \
     chown oracle:oracle /practices
 
 # Define default command to start script. 
