@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: script to build a Docker image
+# Description: script to build a Docker image for client 
 
 usage() {
 cat << EOF
