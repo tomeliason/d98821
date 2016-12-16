@@ -26,6 +26,14 @@ FROM oraclelinux:latest
 
 RUN yum install git -y
 
+RUN yum install unzip -y
+
+RUN yum install gcc -y
+
+RUN yum install openssl-devel -y
+
+RUN yum install make -y
+
 RUN mkdir /u01 && \
     chmod a+xr /u01 && \
     useradd -b /u01 -M -s /bin/bash oracle && \
@@ -61,7 +69,7 @@ RUN tar -xzf /u01/$JAVA_PKG -C /u01 \
 # File grinder.zip exists in same directory as Dockerfile
 # Download from http://downloads.sourceforge.net/project/grinder/The%20Grinder%203/ and rename to grinder.zip
 
-ENV GRINDER_PKG=jdk.tar.gz 
+ENV GRINDER_PKG=grinder.zip
 
 COPY $GRINDER_PKG /u01/
 
